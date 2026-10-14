@@ -1,42 +1,43 @@
 {{ header }}
-<div id="account-forgotten" class="container">
-  <ul class="breadcrumb">
-    {% for breadcrumb in breadcrumbs %}
-    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
-    {% endfor %}
-  </ul>
-  {% if error_warning %}
-  <div class="alert alert-danger alert-dismissible"><i class="fa fa-exclamation-circle"></i> {{ error_warning }}</div>
-  {% endif %}
-  <div class="row">{{ column_left }}
-    {% if column_left and column_right %}
-    {% set class = 'col-sm-6' %}
-    {% elseif column_left or column_right %}
-    {% set class = 'col-sm-9' %}
-    {% else %}
-    {% set class = 'col-sm-12' %}
-    {% endif %}
-    <div id="content" class="{{ class }}">{{ content_top }}
-      <h1>{{ heading_title }}</h1>
-      <p>{{ text_email }}</p>
-      <form action="{{ action }}" method="post" enctype="multipart/form-data" class="form-horizontal">
-        <fieldset>
-          <legend>{{ text_your_email }}</legend>
-          <div class="form-group required">
-            <label class="col-sm-2 control-label" for="input-email">{{ entry_email }}</label>
-            <div class="col-sm-10">
-              <input type="text" name="email" value="{{ email }}" placeholder="{{ entry_email }}" id="input-email" class="form-control" />
-            </div>
+
+<main id="account-forgotten" class="modern-account">
+  <div class="container">
+    <nav aria-label="Breadcrumb" class="modern-breadcrumb mb-4">
+      {% for breadcrumb in breadcrumbs %}
+        {% if not loop.first %}<span aria-hidden="true">›</span>{% endif %}
+        {% if loop.last %}
+          <span class="crumb-current">{{ breadcrumb.text }}</span>
+        {% else %}
+          <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+        {% endif %}
+      {% endfor %}
+    </nav>
+
+    <div class="grid" style="display:grid;grid-template-columns:1fr 320px;gap:20px;">
+      <section class="modern-card">
+        <div class="card-head"><h1 class="card-title">{{ heading_title }}</h1></div>
+
+        <form action="{{ action }}" method="post" class="p-5 space-y-4">
+          <p class="text-sm text-muted">{{ text_your_email }}</p>
+
+          <div class="form-group">
+            <label class="form-label" for="input-email">{{ entry_email }}</label>
+            <input type="email" name="email" value="{{ email }}" id="input-email" class="form-control" />
+            {% if error_warning %}<div class="text-danger mt-1">{{ error_warning }}</div>{% endif %}
           </div>
-        </fieldset>
-        <div class="buttons clearfix">
-          <div class="pull-left"><a href="{{ back }}" class="btn btn-default">{{ button_back }}</a></div>
-          <div class="pull-right">
-            <input type="submit" value="{{ button_continue }}" class="btn btn-primary" />
+
+          <div class="flex items-center justify-between mt-4">
+            <a href="{{ back }}" class="btn btn-ghost">{{ button_back }}</a>
+            <button type="submit" class="btn btn-primary">{{ button_continue }}</button>
           </div>
-        </div>
-      </form>
-      {{ content_bottom }}</div>
-    {{ column_right }}</div>
-</div>
+        </form>
+      </section>
+
+      <aside>{{ column_right }}</aside>
+    </div>
+
+    <div class="mt-6">{{ content_bottom }}</div>
+  </div>
+</main>
+
 {{ footer }}

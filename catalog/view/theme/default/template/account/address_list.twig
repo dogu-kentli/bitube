@@ -1,70 +1,70 @@
 {{ header }}
-<style>
-html.dark #account-address-list-page { background:#020617!important; color:#e2e8f0!important; }
-html.dark #account-address-list-page .overflow-hidden.rounded-3xl { background:#111827!important; border-color:#334155!important; }
-html.dark #account-address-list-page article { background:#1e293b!important; border-color:#475569!important; }
-html.dark #account-address-list-page article:hover { border-color:#6366f1!important; }
-html.dark #account-address-list-page h1,
-html.dark #account-address-list-page h2 { color:#f1f5f9!important; }
-html.dark #account-address-list-page p,
-html.dark #account-address-list-page address { color:#cbd5e1!important; }
-html.dark #account-address-list-page .border-slate-100 { border-color:#334155!important; }
-html.dark #account-address-list-page .bg-indigo-50 { background:#1e1b4b!important; }
-html.dark #account-address-list-page .text-indigo-600,
-html.dark #account-address-list-page .text-indigo-500 { color:#a5b4fc!important; }
-html.dark #account-address-list-page .text-slate-500,
-html.dark #account-address-list-page .text-slate-600 { color:#94a3b8!important; }
-html.dark #account-address-list-page a.border-slate-300,
-html.dark #account-address-list-page article a.border-slate-200 { background:#1e293b!important; border-color:#475569!important; color:#e2e8f0!important; }
-html.dark #account-address-list-page a.border-rose-200 { background:#2b1520!important; border-color:#713044!important; color:#fda4af!important; }
-html.dark #account-address-list-page a.bg-indigo-600 { background:#4f46e5!important; color:#fff!important; }
-html.dark #account-address-list-page a.bg-indigo-600:hover { background:#6366f1!important; }
-html.dark #account-address-list-page .ring-indigo-50\/50 { --tw-ring-color:rgba(49,46,129,.2)!important; }
-</style>
-<main id="account-address-list-page" class="flex-1 w-full bg-slate-50 px-4 py-8 text-slate-800 dark:bg-slate-950 dark:text-slate-100 sm:px-6 sm:py-10">
-  <div class="mx-auto max-w-7xl">
-    <nav aria-label="Breadcrumb" class="mb-6">
-      <ol class="flex flex-wrap items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
-        {% for breadcrumb in breadcrumbs %}
-        <li class="flex items-center gap-2">{% if not loop.first %}<i class="fa-solid fa-chevron-right text-[10px]" aria-hidden="true"></i>{% endif %}{% if loop.last %}<span class="font-semibold text-indigo-600 dark:text-indigo-400" aria-current="page">{{ breadcrumb.text }}</span>{% else %}<a href="{{ breadcrumb.href }}" class="transition hover:text-indigo-600 dark:hover:text-indigo-400">{{ breadcrumb.text }}</a>{% endif %}</li>
-        {% endfor %}
-      </ol>
+
+<main id="account-address-list" class="modern-account">
+  <div class="container">
+    <nav aria-label="Breadcrumb" class="modern-breadcrumb mb-4">
+      {% for breadcrumb in breadcrumbs %}
+        {% if not loop.first %}<span aria-hidden="true">›</span>{% endif %}
+        {% if loop.last %}
+          <span class="crumb-current">{{ breadcrumb.text }}</span>
+        {% else %}
+          <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+        {% endif %}
+      {% endfor %}
     </nav>
-    {% if success %}<div class="mb-5 flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-200" role="status"><i class="fa-solid fa-circle-check mt-0.5" aria-hidden="true"></i><span>{{ success }}</span></div>{% endif %}
-    {% if error_warning %}<div class="mb-5 flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-800 dark:border-amber-900 dark:bg-amber-950/40 dark:text-amber-200" role="alert"><i class="fa-solid fa-circle-exclamation mt-0.5" aria-hidden="true"></i><span>{{ error_warning }}</span></div>{% endif %}
-    <div class="row">
-      {{ column_left }}
-      <section class="min-w-0 {% if column_left and column_right %}col-sm-6{% elseif column_left or column_right %}col-sm-9{% else %}col-sm-12{% endif %}">
-        {{ content_top }}
-        <div class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
-          <div class="flex flex-col gap-4 border-b border-slate-100 px-5 py-5 dark:border-slate-800 sm:flex-row sm:items-center sm:justify-between sm:px-7">
-            <div class="flex items-center gap-3"><span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600 dark:bg-indigo-950/60 dark:text-indigo-300"><i class="fa-solid fa-location-dot" aria-hidden="true"></i></span><div><h1 class="text-xl font-extrabold text-slate-900 dark:text-white">{{ text_address_book }}</h1><p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Kayıtlı teslimat adreslerinizi yönetin.</p></div></div>
-            <a href="{{ add }}" class="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900"><i class="fa-solid fa-plus" aria-hidden="true"></i>{{ button_new_address }}</a>
+
+    {% if success %}
+      <div class="alert alert-success mb-4"><span class="icon"><i class="fa-solid fa-circle-check"></i></span><div>{{ success }}</div></div>
+    {% endif %}
+
+    {% if error_warning %}
+      <div class="alert alert-danger mb-4"><span class="icon"><i class="fa-solid fa-exclamation-triangle"></i></span><div>{{ error_warning }}</div></div>
+    {% endif %}
+
+    <div class="grid" style="display:grid;grid-template-columns: 1fr 320px; gap:20px;">
+      <section class="modern-card">
+        <div class="card-head">
+          <div>
+            <h1 class="card-title">{{ heading_title }}</h1>
+            <div class="card-sub">{{ text_address }}</div>
           </div>
-          <div class="p-5 sm:p-7">
-            {% if addresses %}
-            <div class="grid gap-4 md:grid-cols-2">
+          <a href="{{ add }}" class="btn btn-primary">{{ button_add }}</a>
+        </div>
+
+        <div class="p-0">
+          {% if addresses %}
+            <div class="grid gap-4 md:grid-cols-2 p-5">
               {% for result in addresses %}
-              <article class="flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 transition hover:border-indigo-200 hover:shadow-sm dark:border-slate-700 dark:bg-slate-800/60 dark:hover:border-indigo-800">
-                <div class="mb-3 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-300"><i class="fa-solid fa-house" aria-hidden="true"></i><span>{{ text_address }}</span></div>
-                <address class="flex-1 not-italic text-sm leading-6 text-slate-600 dark:text-slate-300">{{ result.address }}</address>
-                <div class="mt-5 flex flex-wrap gap-2 border-t border-slate-100 pt-4 dark:border-slate-700">
-                  <a href="{{ result.update }}" class="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 transition hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700 dark:border-slate-600 dark:text-slate-200 dark:hover:border-indigo-800 dark:hover:bg-indigo-950/40 dark:hover:text-indigo-300"><i class="fa-regular fa-pen-to-square" aria-hidden="true"></i>{{ button_edit }}</a>
-                  <a href="{{ result.delete }}" title="{{ button_delete }}" onclick="return confirm('{{ text_confirm }}')" class="inline-flex items-center gap-2 rounded-lg border border-rose-200 px-3 py-2 text-sm font-semibold text-rose-600 transition hover:bg-rose-50 dark:border-rose-900/70 dark:text-rose-300 dark:hover:bg-rose-950/40"><i class="fa-regular fa-trash-can" aria-hidden="true"></i>{{ button_delete }}</a>
-                </div>
-              </article>
+                <article class="modern-card">
+                  <div class="mb-3 text-xs font-bold uppercase tracking-wider text-indigo-600"><i class="fa-solid fa-house"></i> {{ result.address_1 }}</div>
+                  <address class="text-sm leading-6">{{ result.address }}</address>
+                  <div class="mt-4 flex flex-wrap gap-2">
+                    <a href="{{ result.update }}" class="btn btn-ghost">{{ button_update }}</a>
+                    <a href="{{ result.delete }}" title="{{ button_delete }}" onclick="return confirm('{{ text_confirm }}')" class="btn btn-ghost text-rose-600">{{ button_delete }}</a>
+                  </div>
+                </article>
               {% endfor %}
             </div>
-            {% else %}
-            <div class="py-10 text-center"><span class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-500 ring-8 ring-indigo-50/50 dark:bg-indigo-950/50 dark:text-indigo-400 dark:ring-indigo-950/20"><i class="fa-solid fa-map-location-dot text-xl" aria-hidden="true"></i></span><h2 class="font-bold text-slate-800 dark:text-slate-100">{{ text_empty }}</h2><p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Yeni bir adres ekleyerek teslimat bilgilerinizi kaydedebilirsiniz.</p></div>
-            {% endif %}
-            <div class="mt-6 flex justify-start border-t border-slate-100 pt-5 dark:border-slate-800"><a href="{{ back }}" class="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>{{ button_back }}</a></div>
+          {% else %}
+            <div class="modern-card text-center p-8">
+              <div class="text-lg font-bold">{{ text_empty }}</div>
+            </div>
+          {% endif %}
+
+          <div class="p-5 border-t">
+            <a href="{{ back }}" class="btn btn-ghost">{{ button_back }}</a>
           </div>
         </div>
-        {{ content_bottom }}
+
       </section>
-      {{ column_right }}
+
+      <aside>
+        {{ column_right }}
+      </aside>
     </div>
+
+    <div class="mt-6">{{ content_bottom }}</div>
   </div>
 </main>
+
 {{ footer }}

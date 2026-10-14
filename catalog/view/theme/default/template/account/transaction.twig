@@ -1,57 +1,44 @@
 {{ header }}
-<div id="account-transaction" class="container">
-  <ul class="breadcrumb">
-    {% for breadcrumb in breadcrumbs %}
-    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
-    {% endfor %}
-  </ul>
-  <div class="row">{{ column_left }}
-    {% if column_left and column_right %}
-    {% set class = 'col-sm-6' %}
-    {% elseif column_left or column_right %}
-    {% set class = 'col-sm-9' %}
-    {% else %}
-    {% set class = 'col-sm-12' %}
-    {% endif %}
-    <div id="content" class="{{ class }}">{{ content_top }}
-      <h1>{{ heading_title }}</h1>
-      <p>{{ text_total }} <b>{{ total }}</b>.</p>
-      <div class="table-responsive">
-        <table class="table table-bordered table-hover">
-          <thead>
-            <tr>
-              <td class="text-left">{{ column_date_added }}</td>
-              <td class="text-left">{{ column_description }}</td>
-              <td class="text-right">{{ column_amount }}</td>
-            </tr>
-          </thead>
-          <tbody>
-          
-          {% if transactions %}
-          {% for transaction in transactions %}
-          <tr>
-            <td class="text-left">{{ transaction.date_added }}</td>
-            <td class="text-left">{{ transaction.description }}</td>
-            <td class="text-right">{{ transaction.amount }}</td>
-          </tr>
-          {% endfor %}
-          {% else %}
-          <tr>
-            <td class="text-center" colspan="5">{{ text_empty }}</td>
-          </tr>
-          {% endif %}
+
+<main id="account-transaction" class="modern-account">
+  <div class="container">
+    <nav aria-label="Breadcrumb" class="modern-breadcrumb mb-4">
+      {% for breadcrumb in breadcrumbs %}
+        {% if not loop.first %}<span aria-hidden="true">›</span>{% endif %}
+        {% if loop.last %}
+          <span class="crumb-current">{{ breadcrumb.text }}</span>
+        {% else %}
+          <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+        {% endif %}
+      {% endfor %}
+    </nav>
+
+    <section class="modern-card p-5">
+      <h1 class="card-title">{{ heading_title }}</h1>
+
+      {% if transactions %}
+        <div class="table-responsive mt-4">
+          <table class="table">
+            <thead><tr><th>{{ column_date_added }}</th><th>{{ column_description }}</th><th class="text-right">{{ column_amount }}</th></tr></thead>
+            <tbody>
+              {% for transaction in transactions %}
+                <tr>
+                  <td>{{ transaction.date_added }}</td>
+                  <td>{{ transaction.description }}</td>
+                  <td class="text-right">{{ transaction.amount }}</td>
+                </tr>
+              {% endfor %}
             </tbody>
-          
-        </table>
-      </div>
-      <div class="row">
-        <div class="col-sm-6 text-left">{{ pagination }}</div>
-        <div class="col-sm-6 text-right">{{ results }}</div>
-      </div>
-      <div class="buttons clearfix">
-        <div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
-      </div>
-      {{ content_bottom }}</div>
-    {{ column_right }}</div>
-</div>
+          </table>
+        </div>
+      {% else %}
+        <div class="mt-4">{{ text_empty }}</div>
+      {% endif %}
+
+    </section>
+
+    <div class="mt-6">{{ content_bottom }}</div>
+  </div>
+</main>
+
 {{ footer }}
