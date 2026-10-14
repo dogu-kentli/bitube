@@ -1,156 +1,90 @@
 {{ header }}
 
-<style>
-html.dark #account-account { background-color: #020617 !important; color: #e2e8f0 !important; }
-html.dark #accountMenuToggle,
-html.dark #recentOrdersPanel { background-color: #111827 !important; border-color: #334155 !important; color: #e2e8f0 !important; }
-html.dark #recentOrdersPanel > div:first-child,
-html.dark #recentOrdersPanel tbody tr,
-html.dark #recentOrdersPanel tbody td { border-color: #334155 !important; }
-html.dark #recentOrdersPanel h2,
-html.dark #recentOrdersPanel h3 { color: #f1f5f9 !important; }
-html.dark #recentOrdersPanel p { color: #94a3b8 !important; }
-html.dark #recentOrdersPanel thead { background-color: #0b1220 !important; color: #94a3b8 !important; }
-html.dark #recentOrdersPanel tbody td { color: #cbd5e1 !important; }
-html.dark #recentOrdersPanel tbody td:first-child,
-html.dark #recentOrdersPanel tbody td:nth-last-child(2) { color: #f1f5f9 !important; }
-html.dark #recentOrdersPanel tbody tr:hover { background-color: #1e1b4b !important; }
-html.dark #recentOrdersPanel tbody td span { background-color: #312e81 !important; color: #e0e7ff !important; }
-html.dark #recentOrdersPanel [class*="bg-indigo-50"] { background-color: #1e1b4b !important; }
-html.dark #accountMenuToggle:hover { background-color: #1e293b !important; }
-html.dark #account-account [role="status"] { background-color: #123326 !important; border-color: #236344 !important; color: #bbf7d0 !important; }
-html.dark #customerPerformanceCard { background-color: #111827 !important; border-color: #334155 !important; color: #e2e8f0 !important; }
-html.dark #customerPerformanceCard .performance-metric { background-color: #0b1220 !important; border-color: #334155 !important; }
-html.dark #customerPerformanceCard .performance-target { background: linear-gradient(135deg, #172554, #111827) !important; border-color: #3730a3 !important; }
-html.dark #customerPerformanceCard h2,
-html.dark #customerPerformanceCard .performance-value { color: #f1f5f9 !important; }
-html.dark #customerPerformanceCard p,
-html.dark #customerPerformanceCard .performance-muted { color: #94a3b8 !important; }
-html.dark #customerPerformanceCard .performance-divider { border-color: #334155 !important; }
-html.dark #customerPerformanceCard .performance-track { background-color: #1f2937 !important; }
-html.dark #customerPerformanceCard .performance-fill { background: linear-gradient(90deg, #15803d, #4ade80) !important; }
-</style>
+<main id="account-account" class="modern-account">
+  <div class="container">
+    <nav aria-label="Breadcrumb" class="modern-breadcrumb mb-4">
+      {% for breadcrumb in breadcrumbs %}
+        {% if not loop.first %}<span aria-hidden="true">›</span>{% endif %}
+        {% if loop.last %}
+          <span class="crumb-current">{{ breadcrumb.text }}</span>
+        {% else %}
+          <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+        {% endif %}
+      {% endfor %}
+    </nav>
 
-<main id="account-account" class="flex-1 w-full bg-slate-50 px-4 py-8 text-slate-800 dark:bg-slate-950 dark:text-slate-100 sm:px-6 sm:py-10">
-    <div class="mx-auto max-w-7xl">
-        <nav aria-label="Breadcrumb" class="mb-6">
-            <ol class="flex flex-wrap items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
-                {% for breadcrumb in breadcrumbs %}
-                <li class="flex items-center gap-2">
-                    {% if not loop.first %}<i class="fa-solid fa-chevron-right text-[10px]" aria-hidden="true"></i>{% endif %}
-                    {% if loop.last %}<span class="font-semibold text-indigo-600 dark:text-indigo-400" aria-current="page">{{ breadcrumb.text }}</span>
-                    {% else %}<a href="{{ breadcrumb.href }}" class="transition hover:text-indigo-600 dark:hover:text-indigo-400">{{ breadcrumb.text }}</a>{% endif %}
-                </li>
-                {% endfor %}
-            </ol>
-        </nav>
+    {{ content_top }}
 
-        {{ content_top }}
+    <div class="grid" style="display:grid;grid-template-columns: 1fr 320px; gap:20px;">
+      <section class="modern-card">
+        {% if success %}
+        <div class="alert alert-success mb-4">
+          <span class="icon"><i class="fa-solid fa-circle-check" aria-hidden="true"></i></span>
+          <div>{{ success }}</div>
+        </div>
+        {% endif %}
 
-        <div class="row">
-            {{ column_left }}
-            <section class="min-w-0 {% if column_left and column_right %}col-sm-6{% elseif column_left or column_right %}col-sm-9{% else %}col-sm-12{% endif %}">
-                {% if success %}
-                <div class="mb-5 flex items-start gap-3 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800 dark:border-emerald-900 dark:bg-emerald-950/40 dark:text-emerald-200" role="status">
-                    <i class="fa-solid fa-circle-check mt-0.5 text-emerald-600 dark:text-emerald-400" aria-hidden="true"></i><span>{{ success }}</span>
-                </div>
-                {% endif %}
-
-                <section id="customerPerformanceCard" class="mb-6 overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900">
-                    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-slate-100 px-5 py-5 dark:border-slate-800 sm:px-7">
-                        <div class="flex items-center gap-3">
-                            <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600 dark:bg-indigo-950/60 dark:text-indigo-300"><i class="fa-solid fa-chart-line" aria-hidden="true"></i></span>
-                            <div>
-                                <h2 class="text-lg font-extrabold text-slate-900 dark:text-white">Müşteri performansı</h2>
-                                <p class="mt-0.5 text-sm text-slate-500 dark:text-slate-400">Örnek Kitabevi <span class="mx-1 text-slate-300 dark:text-slate-600">·</span> Son 12 ay</p>
-                            </div>
-                        </div>
-                        <span class="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-bold text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300"><i class="fa-solid fa-arrow-trend-up" aria-hidden="true"></i> Üyelik avantajı</span>
-                    </div>
-
-                    <div class="p-5 sm:p-7">
-                        <div class="mb-6 grid gap-3 sm:grid-cols-2">
-                            <div class="performance-metric rounded-2xl border border-slate-100 bg-slate-50/70 p-4 sm:p-5">
-                                <p class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Uygun sipariş toplamı</p>
-                                <p class="performance-value mt-2 text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">428.000 <span class="text-base font-bold">TL</span></p>
-                                <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Son 12 aylık alışveriş</p>
-                            </div>
-                            <div class="performance-metric flex items-center justify-between rounded-2xl border border-slate-100 bg-slate-50/70 p-4 sm:p-5">
-                                <div>
-                                    <p class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">Mevcut indirim</p>
-                                    <p class="performance-value mt-2 text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">%45</p>
-                                    <p class="mt-1 text-xs text-slate-500 dark:text-slate-400">Standart üye</p>
-                                </div>
-                                <span class="flex h-12 w-12 items-center justify-center rounded-full border-4 border-indigo-100 text-sm font-extrabold text-indigo-600 dark:border-indigo-900 dark:text-indigo-300"><i class="fa-solid fa-percent" aria-hidden="true"></i></span>
-                            </div>
-                        </div>
-
-                        <div class="performance-target rounded-2xl border border-indigo-100 bg-gradient-to-br from-indigo-50/80 to-white p-4 dark:border-indigo-900 dark:from-indigo-950/50 dark:to-slate-900 sm:p-5">
-                            <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
-                                <div>
-                                    <p class="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-300">Bir sonraki hedef</p>
-                                    <h3 class="mt-1 font-bold text-slate-900 dark:text-white">Avantajlı üyelik <span class="font-medium text-slate-500 dark:text-slate-400">· %46 indirim</span></h3>
-                                </div>
-                                <div class="text-right"><p class="text-[11px] font-semibold text-slate-500 dark:text-slate-400">Hedef tutar</p><p class="performance-value font-extrabold text-slate-900 dark:text-white">450.000 TL</p></div>
-                            </div>
-                            <div class="performance-track h-2.5 overflow-hidden rounded-full bg-white dark:bg-slate-800" role="progressbar" aria-label="Avantajlı üyelik hedefi ilerlemesi" aria-valuemin="0" aria-valuemax="100" aria-valuenow="95.1">
-                                <div class="performance-fill h-full rounded-full bg-gradient-to-r from-emerald-700 to-green-500" style="width: 95.1%"></div>
-                            </div>
-                            <div class="mt-2 flex items-center justify-between gap-3 text-xs text-slate-500 dark:text-slate-400">
-                                <span class="font-bold text-slate-700 dark:text-slate-200">Hedefe 22.000 TL kaldı</span>
-                                <span class="font-semibold">%95,1 tamamlandı</span>
-                            </div>
-                        </div>
-                        <p class="mt-4 flex items-start gap-2 text-xs leading-relaxed text-slate-500 dark:text-slate-400"><i class="fa-regular fa-circle-question mt-0.5 text-indigo-500" aria-hidden="true"></i><span>Bir sonraki uygun siparişleriniz hedef tutara eklendikçe indirim seviyeniz güncellenir.</span></p>
-                    </div>
-                </section>
-
-                <div id="recentOrdersPanel" class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm transition-shadow duration-200 hover:shadow-md dark:border-slate-800 dark:bg-slate-900">
-                    <div class="flex flex-col gap-4 border-b border-slate-100 px-5 py-5 dark:border-slate-800 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-                        <div class="flex items-center gap-3">
-                            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 dark:bg-indigo-950/60 dark:text-indigo-300"><i class="fa-solid fa-receipt" aria-hidden="true"></i></span>
-                            <div>
-                                <h2 class="text-lg font-bold text-slate-900 dark:text-white">Son siparişler</h2>
-                                <p class="mt-0.5 text-sm text-slate-500 dark:text-slate-400">En son verdiğiniz 5 sipariş</p>
-                            </div>
-                        </div>
-                        <a href="{{ order }}" class="group inline-flex min-h-10 items-center justify-center gap-2 rounded-xl border border-indigo-200 px-4 py-2 text-sm font-semibold text-indigo-700 transition hover:border-indigo-300 hover:bg-indigo-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 dark:border-indigo-900 dark:text-indigo-300 dark:hover:border-indigo-700 dark:hover:bg-indigo-950/50 dark:focus-visible:ring-offset-slate-900">Tüm siparişler <i class="fa-solid fa-arrow-right text-xs transition-transform group-hover:translate-x-0.5" aria-hidden="true"></i></a>
-                    </div>
-
-                    {% if orders %}
-                    <div class="overflow-x-auto">
-                        <table class="w-full min-w-[620px] text-left text-sm">
-                            <thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500 dark:bg-slate-950/60 dark:text-slate-400">
-                                <tr><th class="px-6 py-3 font-bold">Sipariş</th><th class="px-6 py-3 font-bold">Tarih</th><th class="px-6 py-3 font-bold">Durum</th><th class="px-6 py-3 font-bold">Ürün</th><th class="px-6 py-3 text-right font-bold">Toplam</th><th class="px-6 py-3"></th></tr>
-                            </thead>
-                            <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
-                                {% for recent_order in orders %}
-                                <tr class="transition-colors hover:bg-indigo-50/50 dark:hover:bg-indigo-950/20">
-                                    <td class="whitespace-nowrap px-4 py-4 font-bold text-slate-900 dark:text-white sm:px-6">#{{ recent_order.order_id }}</td>
-                                    <td class="whitespace-nowrap px-4 py-4 text-slate-600 dark:text-slate-300 sm:px-6">{{ recent_order.date_added }}</td>
-                                    <td class="whitespace-nowrap px-4 py-4 sm:px-6"><span class="inline-flex items-center gap-1.5 rounded-full bg-indigo-50 px-2.5 py-1 text-xs font-semibold text-indigo-700 dark:bg-indigo-950/60 dark:text-indigo-300"><span class="h-1.5 w-1.5 rounded-full bg-indigo-500 dark:bg-indigo-400"></span>{{ recent_order.status }}</span></td>
-                                    <td class="whitespace-nowrap px-4 py-4 text-slate-600 dark:text-slate-300 sm:px-6">{{ recent_order.products }}</td>
-                                    <td class="whitespace-nowrap px-4 py-4 text-right font-bold text-slate-900 dark:text-white sm:px-6">{{ recent_order.total }}</td>
-                                    <td class="whitespace-nowrap px-4 py-4 text-right sm:px-6"><a href="{{ recent_order.view }}" class="inline-flex items-center gap-1 rounded-lg font-semibold text-indigo-600 transition hover:text-indigo-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 dark:text-indigo-400 dark:hover:text-indigo-300">Detay <i class="fa-solid fa-arrow-right text-[10px]" aria-hidden="true"></i></a></td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    {% else %}
-                    <div class="px-6 py-14 text-center">
-                        <span class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-500 ring-8 ring-indigo-50/50 dark:bg-indigo-950/50 dark:text-indigo-400 dark:ring-indigo-950/20"><i class="fa-solid fa-box-open text-xl" aria-hidden="true"></i></span>
-                        <h3 class="font-bold text-slate-800 dark:text-slate-100">Henüz siparişiniz yok</h3>
-                        <p class="mt-1 text-sm text-slate-500 dark:text-slate-400">Sipariş verdiğinizde son siparişleriniz burada görünecek.</p>
-                    </div>
-                    {% endif %}
-                </div>
-            </section>
-            {{ column_right }}
+        <div class="card-head">
+          <div>
+            <h2 class="card-title">Müşteri performansı</h2>
+            <div class="card-sub">Örnek Kitabevi · Son 12 ay</div>
+          </div>
+          <a href="{{ order }}" class="btn btn-primary">Tüm siparişler</a>
         </div>
 
-        <div class="mt-8">{{ content_bottom }}</div>
+        <div class="mb-4">
+          <!-- metric grid -->
+          <div class="form-row">
+            <div class="form-group modern-card">
+              <div class="form-label">Uygun sipariş toplamı</div>
+              <div class="h2">428.000 <small>TL</small></div>
+              <div class="form-sub">Son 12 aylık alışveriş</div>
+            </div>
+            <div class="form-group modern-card">
+              <div class="form-label">Mevcut indirim</div>
+              <div class="h2"> %45 </div>
+              <div class="form-sub">Standart üye</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- recent orders table (responsive) -->
+        <div class="table-responsive">
+          {% if orders %}
+          <table class="table">
+            <thead>
+              <tr><th>Sipariş</th><th>Tarih</th><th>Durum</th><th>Ürünler</th><th class="text-right">Toplam</th><th></th></tr>
+            </thead>
+            <tbody>
+              {% for recent_order in orders %}
+              <tr>
+                <td>#{{ recent_order.order_id }}</td>
+                <td>{{ recent_order.date_added }}</td>
+                <td>{{ recent_order.status }}</td>
+                <td>{{ recent_order.products }}</td>
+                <td class="text-right">{{ recent_order.total }}</td>
+                <td class="text-right"><a href="{{ recent_order.view }}" class="btn btn-ghost">Görüntüle</a></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <div class="modern-card text-center">
+            <div style="font-size:1.15rem; font-weight:700;">Henüz siparişiniz yok</div>
+            <p class="form-sub">Sipariş verdiğinizde buradan görüntüleyebilirsiniz.</p>
+          </div>
+          {% endif %}
+        </div>
+
+      </section>
+
+      <aside>
+        {{ column_right }}
+      </aside>
     </div>
+
+    <div class="mt-6">{{ content_bottom }}</div>
+  </div>
 </main>
 
 {{ footer }}
