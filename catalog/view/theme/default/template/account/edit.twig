@@ -1,0 +1,169 @@
+{{ header }}
+
+<style>
+html.dark #account-edit-page { background-color: #020617 !important; color: #e2e8f0 !important; }
+html.dark #account-edit-page .account-edit-panel { background-color: #111827 !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+html.dark #account-edit-page .account-edit-panel h1,
+html.dark #account-edit-page .account-edit-panel legend { color: #f1f5f9 !important; }
+html.dark #account-edit-page .account-edit-panel label { color: #cbd5e1 !important; }
+html.dark #account-edit-page .account-edit-panel input:not([type="radio"]):not([type="checkbox"]):not([type="file"]),
+html.dark #account-edit-page .account-edit-panel select,
+html.dark #account-edit-page .account-edit-panel textarea { background-color: #0b1220 !important; border-color: #475569 !important; color: #e2e8f0 !important; }
+html.dark #account-edit-page .account-edit-panel input::placeholder,
+html.dark #account-edit-page .account-edit-panel textarea::placeholder { color: #64748b !important; }
+html.dark #account-edit-page .account-edit-panel .custom-option { border-color: #334155 !important; background-color: #0b1220 !important; color: #cbd5e1 !important; }
+html.dark #account-edit-page .account-edit-panel .account-edit-error { color: #fca5a5 !important; }
+html.dark #account-edit-page .account-edit-panel .account-edit-secondary { border-color: #475569 !important; color: #cbd5e1 !important; }
+</style>
+
+<main id="account-edit-page" class="flex-1 w-full bg-slate-50 px-4 py-8 text-slate-800 dark:bg-slate-950 dark:text-slate-100 sm:px-6 sm:py-10">
+    <div class="mx-auto max-w-7xl">
+        <nav aria-label="Breadcrumb" class="mb-6">
+            <ol class="flex flex-wrap items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+                {% for breadcrumb in breadcrumbs %}
+                <li class="flex items-center gap-2">
+                    {% if not loop.first %}<i class="fa-solid fa-chevron-right text-[10px]" aria-hidden="true"></i>{% endif %}
+                    {% if loop.last %}<span class="font-semibold text-indigo-600 dark:text-indigo-400" aria-current="page">{{ breadcrumb.text }}</span>
+                    {% else %}<a href="{{ breadcrumb.href }}" class="transition hover:text-indigo-600 dark:hover:text-indigo-400">{{ breadcrumb.text }}</a>{% endif %}
+                </li>
+                {% endfor %}
+            </ol>
+        </nav>
+
+        <div class="row">
+            {{ column_left }}
+            <section class="account-edit-panel min-w-0 rounded-3xl border border-slate-200 bg-white p-5 shadow-sm dark:border-slate-800 dark:bg-slate-900 sm:p-8 {% if column_left and column_right %}col-sm-6{% elseif column_left or column_right %}col-sm-9{% else %}col-sm-12{% endif %}">
+                {{ content_top }}
+                {% if error_warning %}
+                <div class="mb-6 flex items-start gap-3 rounded-2xl border border-rose-200 bg-rose-50 p-4 text-sm text-rose-800 dark:border-rose-900 dark:bg-rose-950/40 dark:text-rose-200" role="alert"><i class="fa-solid fa-circle-exclamation mt-0.5" aria-hidden="true"></i><span>{{ error_warning }}</span></div>
+                {% endif %}
+
+                <div class="mb-6 border-b border-slate-100 pb-5 dark:border-slate-800">
+                    <h1 class="text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">{{ heading_title }}</h1>
+                    <p class="mt-2 text-sm text-slate-500 dark:text-slate-400">Güncel iletişim bilgilerinizi düzenleyebilirsiniz.</p>
+                </div>
+
+                <form action="{{ action }}" method="post" enctype="multipart/form-data" class="space-y-6">
+                    <fieldset class="space-y-5">
+                        <legend class="mb-4 text-sm font-bold uppercase tracking-wider text-slate-700 dark:text-slate-200">{{ text_your_details }}</legend>
+
+                        <div class="form-group grid gap-2 sm:grid-cols-[190px_minmax(0,1fr)] sm:items-start">
+                            <label for="input-firstname" class="pt-2 text-sm font-semibold text-slate-600 dark:text-slate-300">{{ entry_firstname }}</label>
+                            <div><input type="text" name="firstname" value="{{ firstname }}" placeholder="{{ entry_firstname }}" id="input-firstname" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" />{% if error_firstname %}<p class="account-edit-error mt-1.5 text-sm text-rose-600 dark:text-rose-400">{{ error_firstname }}</p>{% endif %}</div>
+                        </div>
+
+                        <div class="form-group grid gap-2 sm:grid-cols-[190px_minmax(0,1fr)] sm:items-start">
+                            <label for="input-lastname" class="pt-2 text-sm font-semibold text-slate-600 dark:text-slate-300">{{ entry_lastname }}</label>
+                            <div><input type="text" name="lastname" value="{{ lastname }}" placeholder="{{ entry_lastname }}" id="input-lastname" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" />{% if error_lastname %}<p class="account-edit-error mt-1.5 text-sm text-rose-600 dark:text-rose-400">{{ error_lastname }}</p>{% endif %}</div>
+                        </div>
+
+                        <div class="form-group grid gap-2 sm:grid-cols-[190px_minmax(0,1fr)] sm:items-start">
+                            <label for="input-email" class="pt-2 text-sm font-semibold text-slate-600 dark:text-slate-300">{{ entry_email }}</label>
+                            <div><input type="email" name="email" value="{{ email }}" placeholder="{{ entry_email }}" id="input-email" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" />{% if error_email %}<p class="account-edit-error mt-1.5 text-sm text-rose-600 dark:text-rose-400">{{ error_email }}</p>{% endif %}</div>
+                        </div>
+
+                        <div class="form-group grid gap-2 sm:grid-cols-[190px_minmax(0,1fr)] sm:items-start">
+                            <label for="input-telephone" class="pt-2 text-sm font-semibold text-slate-600 dark:text-slate-300">{{ entry_telephone }}</label>
+                            <div><input type="tel" name="telephone" value="{{ telephone }}" placeholder="{{ entry_telephone }}" id="input-telephone" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" />{% if error_telephone %}<p class="account-edit-error mt-1.5 text-sm text-rose-600 dark:text-rose-400">{{ error_telephone }}</p>{% endif %}</div>
+                        </div>
+
+                        {% for custom_field in custom_fields %}
+                        <div class="form-group grid gap-2 sm:grid-cols-[190px_minmax(0,1fr)] sm:items-start custom-field" data-sort="{{ custom_field.sort_order }}">
+                            <label class="pt-2 text-sm font-semibold text-slate-600 dark:text-slate-300" for="input-custom-field{{ custom_field.custom_field_id }}">{{ custom_field.name }}</label>
+                            <div class="min-w-0">
+                                {% if custom_field.type == 'select' %}
+                                <select name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" id="input-custom-field{{ custom_field.custom_field_id }}" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100">
+                                    <option value="">{{ text_select }}</option>
+                                    {% for custom_field_value in custom_field.custom_field_value %}
+                                    <option value="{{ custom_field_value.custom_field_value_id }}" {% if account_custom_field[custom_field.custom_field_id] and custom_field_value.custom_field_value_id == account_custom_field[custom_field.custom_field_id] %}selected{% endif %}>{{ custom_field_value.name }}</option>
+                                    {% endfor %}
+                                </select>
+                                {% elseif custom_field.type == 'radio' %}
+                                <div class="space-y-2 rounded-xl border border-slate-200 p-3 dark:border-slate-700">
+                                    {% for custom_field_value in custom_field.custom_field_value %}
+                                    <label class="custom-option flex cursor-pointer items-center gap-2 rounded-lg border border-transparent px-3 py-2 text-sm text-slate-700 hover:border-indigo-200 hover:bg-indigo-50 dark:text-slate-200 dark:hover:border-indigo-900 dark:hover:bg-indigo-950/40"><input type="radio" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{{ custom_field_value.custom_field_value_id }}" {% if account_custom_field[custom_field.custom_field_id] and custom_field_value.custom_field_value_id == account_custom_field[custom_field.custom_field_id] %}checked{% endif %} class="accent-indigo-600" />{{ custom_field_value.name }}</label>
+                                    {% endfor %}
+                                </div>
+                                {% elseif custom_field.type == 'checkbox' %}
+                                <div class="space-y-2 rounded-xl border border-slate-200 p-3 dark:border-slate-700">
+                                    {% for custom_field_value in custom_field.custom_field_value %}
+                                    <label class="custom-option flex cursor-pointer items-center gap-2 rounded-lg border border-transparent px-3 py-2 text-sm text-slate-700 hover:border-indigo-200 hover:bg-indigo-50 dark:text-slate-200 dark:hover:border-indigo-900 dark:hover:bg-indigo-950/40"><input type="checkbox" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}][]" value="{{ custom_field_value.custom_field_value_id }}" {% if account_custom_field[custom_field.custom_field_id] and custom_field_value.custom_field_value_id in account_custom_field[custom_field.custom_field_id] %}checked{% endif %} class="accent-indigo-600" />{{ custom_field_value.name }}</label>
+                                    {% endfor %}
+                                </div>
+                                {% elseif custom_field.type == 'text' %}
+                                <input type="text" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{% if account_custom_field[custom_field.custom_field_id] %}{{ account_custom_field[custom_field.custom_field_id] }}{% else %}{{ custom_field.value }}{% endif %}" placeholder="{{ custom_field.name }}" id="input-custom-field{{ custom_field.custom_field_id }}" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" />
+                                {% elseif custom_field.type == 'textarea' %}
+                                <textarea name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" rows="4" placeholder="{{ custom_field.name }}" id="input-custom-field{{ custom_field.custom_field_id }}" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none placeholder:text-slate-400 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100">{% if account_custom_field[custom_field.custom_field_id] %}{{ account_custom_field[custom_field.custom_field_id] }}{% else %}{{ custom_field.value }}{% endif %}</textarea>
+                                {% elseif custom_field.type == 'file' %}
+                                <div class="flex flex-wrap items-center gap-3"><button type="button" id="button-custom-field{{ custom_field.custom_field_id }}" data-loading-text="{{ text_loading }}" class="inline-flex items-center gap-2 rounded-xl border border-slate-300 px-4 py-2.5 text-sm font-semibold text-slate-700 transition hover:border-indigo-300 hover:bg-indigo-50 dark:border-slate-600 dark:text-slate-200 dark:hover:bg-slate-800"><i class="fa-solid fa-upload text-indigo-600 dark:text-indigo-400"></i>{{ button_upload }}</button><input type="hidden" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{% if account_custom_field[custom_field.custom_field_id]['code'] %}{{ account_custom_field[custom_field.custom_field_id]['code'] }}{% endif %}" /><span class="text-sm text-slate-500 dark:text-slate-400">{{ account_custom_field[custom_field.custom_field_id]['name'] }}</span></div>
+                                {% elseif custom_field.type == 'date' or custom_field.type == 'time' or custom_field.type == 'datetime' %}
+                                {% set input_format = 'YYYY-MM-DD' %}
+                                {% if custom_field.type == 'time' %}{% set input_format = 'HH:mm' %}{% elseif custom_field.type == 'datetime' %}{% set input_format = 'YYYY-MM-DD HH:mm' %}{% endif %}
+                                <div class="input-group {{ custom_field.type }} flex">
+                                    <input type="text" name="custom_field[{{ custom_field.location }}][{{ custom_field.custom_field_id }}]" value="{% if account_custom_field[custom_field.custom_field_id] %}{{ account_custom_field[custom_field.custom_field_id] }}{% else %}{{ custom_field.value }}{% endif %}" placeholder="{{ custom_field.name }}" data-date-format="{{ input_format }}" id="input-custom-field{{ custom_field.custom_field_id }}" class="min-w-0 flex-1 rounded-l-xl border border-slate-300 bg-white px-4 py-3 text-sm text-slate-900 outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100" />
+                                    <span class="input-group-btn"><button type="button" class="h-full rounded-r-xl border border-l-0 border-slate-300 bg-slate-50 px-4 text-indigo-600 dark:border-slate-700 dark:bg-slate-800 dark:text-indigo-400"><i class="fa-regular fa-calendar" aria-hidden="true"></i></button></span>
+                                </div>
+                                {% endif %}
+                                {% if error_custom_field[custom_field.custom_field_id] %}<p class="account-edit-error mt-1.5 text-sm text-rose-600 dark:text-rose-400">{{ error_custom_field[custom_field.custom_field_id] }}</p>{% endif %}
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </fieldset>
+
+                    <div class="flex flex-col-reverse gap-3 border-t border-slate-100 pt-5 dark:border-slate-800 sm:flex-row sm:justify-between">
+                        <a href="{{ back }}" class="account-edit-secondary inline-flex items-center justify-center gap-2 rounded-xl border border-slate-300 px-5 py-3 text-sm font-semibold text-slate-600 transition hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"><i class="fa-solid fa-arrow-left" aria-hidden="true"></i>{{ button_back }}</a>
+                        <button type="submit" class="inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-6 py-3 text-sm font-bold text-white shadow-sm transition hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 dark:focus:ring-offset-slate-900"><i class="fa-solid fa-floppy-disk" aria-hidden="true"></i>{{ button_continue }}</button>
+                    </div>
+                </form>
+                {{ content_bottom }}
+            </section>
+            {{ column_right }}
+        </div>
+    </div>
+</main>
+
+<script type="text/javascript"><!--
+$('.form-group[data-sort]').detach().each(function() {
+	if ($(this).attr('data-sort') >= 0 && $(this).attr('data-sort') <= $('.form-group').length) {
+		$('.form-group').eq($(this).attr('data-sort')).before(this);
+	}
+
+	if ($(this).attr('data-sort') > $('.form-group').length || $(this).attr('data-sort') == $('.form-group').length) {
+		$('.form-group:last').after(this);
+	}
+
+	if ($(this).attr('data-sort') < -$('.form-group').length) {
+		$('.form-group:first').before(this);
+	}
+});
+
+$('button[id^=\'button-custom-field\']').on('click', function() {
+	var element = this;
+	$('#form-upload').remove();
+	$('body').prepend('<form enctype="multipart/form-data" id="form-upload" style="display:none"><input type="file" name="file" /></form>');
+	$('#form-upload input[name=\'file\']').trigger('click');
+	if (typeof timer != 'undefined') clearInterval(timer);
+	timer = setInterval(function() {
+		if ($('#form-upload input[name=\'file\']').val() != '') {
+			clearInterval(timer);
+			$.ajax({
+				url: 'index.php?route=tool/upload', type: 'post', dataType: 'json', data: new FormData($('#form-upload')[0]), cache: false, contentType: false, processData: false,
+				beforeSend: function() { $(element).buttonanimate('loading'); },
+				complete: function() { $(element).buttonanimate('reset'); },
+					success: function(json) {
+					$(element).parent().find('.text-danger').remove();
+					if (json.error) $(element).parent().append('<div class="account-edit-error mt-2 text-sm text-rose-600">' + json.error + '</div>');
+					if (json.success) { alertsuccess(json.success); $(element).parent().find('input[type=hidden]').val(json.code); }
+				},
+				error: function(xhr, ajaxOptions, thrownError) { console.error('Özel alan dosyası yüklenemedi:', thrownError, xhr.responseText); }
+			});
+		}
+	}, 500);
+});
+
+$('.date').datetimepicker({ language: '{{ datepicker }}', pickTime: false });
+$('.datetime').datetimepicker({ language: '{{ datepicker }}', pickDate: true, pickTime: true });
+$('.time').datetimepicker({ language: '{{ datepicker }}', pickDate: false });
+//--></script>
+
+{{ footer }}

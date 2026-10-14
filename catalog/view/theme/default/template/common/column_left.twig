@@ -1,0 +1,64 @@
+{% if modules or show_account_menu %}
+<aside id="column-left" class="col-sm-3 {% if not show_account_menu %}hidden-xs{% endif %}">
+  {% if show_account_menu %}
+  {% set menu = account_menu %}
+  <div id="accountMenuOverlay" class="fixed inset-0 z-[1065] hidden bg-slate-950/60 backdrop-blur-sm lg:hidden" aria-hidden="true"></div>
+  <aside id="accountMenu" class="fixed inset-y-0 left-0 z-[1070] hidden w-[min(86vw,320px)] -translate-x-full overflow-y-auto rounded-r-3xl border border-slate-200 bg-white shadow-2xl transition-transform duration-300 dark:border-slate-800 dark:bg-slate-900 lg:relative lg:inset-auto lg:z-auto lg:block lg:w-auto lg:translate-x-0 lg:overflow-hidden lg:rounded-3xl lg:shadow-sm">
+    <div class="relative bg-gradient-to-br from-indigo-600 to-indigo-800 px-5 py-6 text-white">
+      <button id="accountMenuClose" type="button" class="absolute right-4 top-4 inline-flex h-9 w-9 items-center justify-center rounded-lg bg-white/10 text-white transition hover:bg-white/20 lg:hidden" aria-label="Menüyü kapat"><i class="fa-solid fa-xmark" aria-hidden="true"></i></button>
+      <div class="mb-3 flex h-11 w-11 items-center justify-center rounded-xl bg-white/15"><i class="fa-solid fa-user-gear text-lg" aria-hidden="true"></i></div>
+      {% if logged %}
+      <h2 class="break-words text-lg font-extrabold">{% if company %}{{ company|e }}{% else %}{{ adsoyad|e }}{% endif %}</h2>
+      <p class="mt-1 text-xs text-indigo-100">Müşteri No: {{ musteri_no|e }}</p>
+      {% endif %}
+    </div>
+    <nav aria-label="Hesap menüsü" class="p-3">
+      <p class="px-3 pb-2 pt-1 text-[10px] font-bold uppercase tracking-widest text-slate-400">Hesabım</p>
+      <a href="{{ menu.account }}" class="account-menu-link {% if route == 'account/account' %}is-active{% endif %}"><i class="fa-solid fa-gauge-high"></i>Genel Bakış</a>
+      <a href="{{ menu.edit }}" class="account-menu-link {% if route == 'account/edit' %}is-active{% endif %}"><i class="fa-regular fa-pen-to-square"></i>{{ menu.text_edit }}</a>
+      <a href="{{ menu.password }}" class="account-menu-link {% if route == 'account/password' %}is-active{% endif %}"><i class="fa-solid fa-key"></i>{{ menu.text_password }}</a>
+      <a href="{{ menu.address }}" class="account-menu-link {% if route starts with 'account/address' %}is-active{% endif %}"><i class="fa-solid fa-location-dot"></i>{{ menu.text_address }}</a>
+      <a href="{{ menu.wishlist }}" class="account-menu-link {% if route == 'account/wishlist' %}is-active{% endif %}"><i class="fa-regular fa-heart"></i>{{ menu.text_wishlist }}</a>
+      <div class="my-3 border-t border-slate-100 dark:border-slate-800"></div>
+      <p class="px-3 pb-2 pt-1 text-[10px] font-bold uppercase tracking-widest text-slate-400">Siparişler</p>
+      <a href="{{ menu.order }}" class="account-menu-link {% if route starts with 'account/order' %}is-active{% endif %}"><i class="fa-solid fa-receipt"></i>{{ menu.text_order }}</a>
+     
+      {% if menu.reward %}<a href="{{ menu.reward }}" class="account-menu-link {% if route == 'account/reward' %}is-active{% endif %}"><i class="fa-solid fa-star"></i>{{ menu.text_reward }}</a>{% endif %}
+      <a href="{{ menu.return }}" class="account-menu-link {% if route starts with 'account/return' %}is-active{% endif %}"><i class="fa-solid fa-arrow-rotate-left"></i>{{ menu.text_return }}</a>
+      <a href="{{ menu.transaction }}" class="account-menu-link {% if route == 'account/transaction' %}is-active{% endif %}"><i class="fa-solid fa-wallet"></i>{{ menu.text_transaction }}</a>
+      <a href="{{ menu.recurring }}" class="account-menu-link {% if route == 'account/recurring' %}is-active{% endif %}"><i class="fa-solid fa-arrows-rotate"></i>{{ menu.text_recurring }}</a>
+      <div class="my-3 border-t border-slate-100 dark:border-slate-800"></div>
+      <p class="px-3 pb-2 pt-1 text-[10px] font-bold uppercase tracking-widest text-slate-400">Diğer</p>
+     
+      <a href="{{ menu.logout }}" class="account-menu-link account-menu-logout"><i class="fa-solid fa-arrow-right-from-bracket"></i>{{ menu.text_logout }}</a>
+    </nav>
+  </aside>
+  <style>
+    #accountMenu .account-menu-link { display:flex; align-items:center; gap:.75rem; border-radius:.75rem; padding:.625rem .75rem; color:#475569; font-size:.875rem; font-weight:500; text-decoration:none; transition:background-color .15s,color .15s; }
+    #accountMenu .account-menu-link i { width:1rem; color:#6366f1; text-align:center; }
+    #accountMenu .account-menu-link:hover, #accountMenu .account-menu-link.is-active { background:#eef2ff; color:#4338ca; }
+    #accountMenu .account-menu-link.is-active { font-weight:700; }
+    #accountMenu .account-menu-link.account-menu-logout { margin-top:.5rem; color:#e11d48; font-weight:600; }
+    #accountMenu .account-menu-link.account-menu-logout i { color:inherit; }
+    html.dark #accountMenu { background:#111827!important; border-color:#334155!important; color:#e2e8f0!important; }
+    html.dark #accountMenu nav>div { border-color:#334155!important; }
+    html.dark #accountMenu nav>p { color:#94a3b8!important; }
+    html.dark #accountMenu .account-menu-link { color:#cbd5e1; }
+    html.dark #accountMenu .account-menu-link i { color:#818cf8; }
+    html.dark #accountMenu .account-menu-link:hover, html.dark #accountMenu .account-menu-link.is-active { background:#312e81; color:#e0e7ff; }
+    html.dark #accountMenu .account-menu-link.account-menu-logout { color:#fda4af; }
+    html.dark #accountMenu .account-menu-link.account-menu-logout:hover { background:#4c1d2a; }
+    @media(max-width:767px) { #column-left:has(#accountMenu) { display:block!important; width:0; height:0; margin:0; padding:0; } }
+    @media(min-width:768px) and (max-width:1023px) {
+      .row:has(> #column-left #accountMenu):not(:has(> #column-right)) > #content,
+      .row:has(> #column-left #accountMenu):not(:has(> #column-right)) > section { width:100%; float:none; }
+      #column-left:has(#accountMenu) { width:0; height:0; margin:0; padding:0; }
+    }
+    @media(max-width:1023px) { #accountMenu { position:fixed; } }
+  </style>
+  {% endif %}
+  {% for module in modules %}
+  {{ module }}
+  {% endfor %}
+</aside>
+{% endif %}

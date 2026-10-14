@@ -1,0 +1,329 @@
+<!-- Footer -->
+    <footer class="w-full border-t border-slate-200 dark:border-slate-800 bg-white/40 dark:bg-slate-900/40 px-4 py-6 text-slate-500 dark:text-slate-400">
+        <div class="mx-auto flex max-w-5xl flex-col items-center gap-4 text-center sm:flex-row sm:justify-between sm:text-left">
+            <div class="flex flex-col gap-1 text-xs">
+                <span class="font-semibold text-slate-700 dark:text-slate-200">BiTube Kurumsal Destek</span>
+                <span>&copy; 2026 BiTube. Tüm hakları saklıdır.</span>
+            </div>
+            <div class="flex flex-col items-center gap-2 text-sm sm:items-end">
+                <a href="tel:{{config_telephone}}" class="inline-flex items-center gap-2 transition hover:text-indigo-600 dark:hover:text-indigo-400">
+                    <i class="fa-solid fa-phone w-4 text-center text-indigo-600 dark:text-indigo-400" aria-hidden="true"></i>
+                    <span>{{config_telephone}}</span>
+                </a>
+                <a href="mailto:info@vadiyayinlari.com" class="inline-flex items-center gap-2 transition hover:text-indigo-600 dark:hover:text-indigo-400">
+                    <i class="fa-solid fa-envelope w-4 text-center text-indigo-600 dark:text-indigo-400" aria-hidden="true"></i>
+                    <span>{{config_email}}</span>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Restore the saved theme and keep the icon and accessible label in sync.
+        const htmlElement = document.documentElement;
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+
+        const savedTheme = localStorage.getItem('bitube-theme');
+        if (savedTheme === 'dark') {
+            htmlElement.classList.remove('light');
+            htmlElement.classList.add('dark');
+        }
+
+        const updateThemeControl = () => {
+            const isDark = htmlElement.classList.contains('dark');
+            themeIcon.className = isDark ? 'fa-solid fa-sun text-lg' : 'fa-solid fa-moon text-lg';
+            const actionLabel = isDark ? 'Aydınlık temaya geç' : 'Karanlık temaya geç';
+            themeToggleBtn.setAttribute('aria-label', actionLabel);
+            themeToggleBtn.title = actionLabel;
+        };
+        updateThemeControl();
+
+        themeToggleBtn.addEventListener('click', () => {
+            const isDark = htmlElement.classList.toggle('dark');
+            htmlElement.classList.toggle('light', !isDark);
+            localStorage.setItem('bitube-theme', isDark ? 'dark' : 'light');
+            updateThemeControl();
+        });
+
+        const accountMenuToggle = document.getElementById('accountMenuToggle');
+        const accountMenu = document.getElementById('accountMenu');
+        const accountMenuOverlay = document.getElementById('accountMenuOverlay');
+        const accountMenuClose = document.getElementById('accountMenuClose');
+        if (accountMenuToggle && accountMenu && accountMenuOverlay) {
+            let accountMenuCloseTimer;
+            const openAccountMenu = () => {
+                window.clearTimeout(accountMenuCloseTimer);
+                accountMenu.classList.remove('hidden');
+                accountMenuOverlay.classList.remove('hidden');
+                document.body.classList.add('overflow-hidden');
+                accountMenuToggle.setAttribute('aria-expanded', 'true');
+                accountMenuToggle.setAttribute('aria-label', 'Hesap menüsünü kapat');
+                requestAnimationFrame(() => accountMenu.classList.remove('-translate-x-full'));
+            };
+            const closeAccountMenu = () => {
+                window.clearTimeout(accountMenuCloseTimer);
+                accountMenu.classList.add('-translate-x-full');
+                accountMenuOverlay.classList.add('hidden');
+                document.body.classList.remove('overflow-hidden');
+                accountMenuToggle.setAttribute('aria-expanded', 'false');
+                accountMenuToggle.setAttribute('aria-label', 'Hesap menüsünü aç');
+                accountMenuCloseTimer = window.setTimeout(() => accountMenu.classList.add('hidden'), 300);
+            };
+
+            accountMenuToggle.addEventListener('click', openAccountMenu);
+            accountMenuOverlay.addEventListener('click', closeAccountMenu);
+            if (accountMenuClose) accountMenuClose.addEventListener('click', closeAccountMenu);
+            document.addEventListener('keydown', (event) => {
+                if (event.key === 'Escape' && accountMenuToggle.getAttribute('aria-expanded') === 'true') closeAccountMenu();
+            });
+        }
+
+        const loginForm = document.getElementById('loginForm');
+        let loginRequestInProgress = false;
+        loginForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            if (loginRequestInProgress) return;
+
+            const loginButton = loginForm.querySelector('button[type="submit"]');
+            loginRequestInProgress = true;
+            $(loginButton).buttonanimate('loading');
+
+            $.ajax({
+                url: loginForm.action,
+                type: 'post',
+                dataType: 'json',
+                data: $(loginForm).serialize(),
+                success: function(json) {
+                    if (json.error && json.error.warning) {
+                        alerterror(json.error.warning);
+                        return;
+                    }
+
+                    if (json.success && json.redirect) {
+                        window.location.href = json.redirect;
+                    }
+                },
+                error: function(xhr) {
+                    const json = xhr.responseJSON;
+                    if (json && json.error && json.error.warning) {
+                        alerterror(json.error.warning);
+                    }
+                },
+                complete: function() {
+                    $(loginButton).buttonanimate('reset');
+                    loginRequestInProgress = false;
+                }
+            });
+        });
+
+        // Kurumsal başvuru formu ve dosya seçimi
+        const corporateForm = document.getElementById('form-register');
+        const documentInput = document.getElementById('corporateDocuments');
+        const documentDropzone = document.getElementById('documentDropzone');
+        const selectedDocuments = document.getElementById('selectedDocuments');
+        const documentError = document.getElementById('documentError');
+        const acceptedDocument = /\.(pdf|png|jpe?g)$/i;
+
+        const uploadDocuments = (files) => {
+            const batch = String(Date.now());
+            corporateForm.dataset.documentBatch = batch;
+            corporateForm.dataset.pendingUploads = String(files.length);
+            selectedDocuments.replaceChildren();
+            corporateForm.querySelectorAll('input[name="documents[]"]').forEach((input) => input.remove());
+
+            Array.from(files).forEach((file) => {
+                const item = document.createElement('li');
+                item.className = 'flex items-center justify-between gap-3';
+                const name = document.createElement('span');
+                name.className = 'break-all';
+                name.textContent = `${file.name} · ${Math.max(1, Math.round(file.size / 1024))} KB`;
+                const status = document.createElement('span');
+                status.className = 'shrink-0 text-indigo-600 dark:text-indigo-400';
+                status.textContent = 'Yükleniyor…';
+                item.append(name, status);
+                selectedDocuments.append(item);
+
+                const uploadData = new FormData();
+                uploadData.append('file', file);
+                $.ajax({
+                    url: 'index.php?route=tool/upload',
+                    type: 'post',
+                    dataType: 'json',
+                    data: uploadData,
+                    processData: false,
+                    contentType: false,
+                    success: function(json) {
+                        if (corporateForm.dataset.documentBatch !== batch) return;
+                        if (json.code) {
+                            const codeInput = document.createElement('input');
+                            codeInput.type = 'hidden';
+                            codeInput.name = 'documents[]';
+                            codeInput.value = json.code;
+                            corporateForm.append(codeInput);
+                            status.textContent = 'Yüklendi';
+                            status.classList.add('text-emerald-600', 'dark:text-emerald-400');
+                        } else {
+                            status.textContent = json.error || 'Yüklenemedi';
+                            status.classList.add('text-rose-600', 'dark:text-rose-400');
+                            documentError.textContent = json.error || 'Belge yüklenemedi.';
+                            documentError.classList.remove('hidden');
+                        }
+                    },
+                    error: function() {
+                        if (corporateForm.dataset.documentBatch !== batch) return;
+                        status.textContent = 'Yüklenemedi';
+                        status.classList.add('text-rose-600', 'dark:text-rose-400');
+                        documentError.textContent = 'OpenCart dosya yüklemesi başarısız oldu. Tekrar deneyin.';
+                        documentError.classList.remove('hidden');
+                    },
+                    complete: function() {
+                        if (corporateForm.dataset.documentBatch === batch) {
+                            corporateForm.dataset.pendingUploads = String(Math.max(0, Number(corporateForm.dataset.pendingUploads) - 1));
+                        }
+                    }
+                });
+            });
+        };
+
+        documentInput.addEventListener('change', () => {
+            const invalidFiles = Array.from(documentInput.files).filter((file) => !acceptedDocument.test(file.name) || file.size > 10 * 1024 * 1024);
+            if (invalidFiles.length) {
+                documentError.textContent = 'Yalnızca PDF, PNG, JPG veya JPEG biçimindeki ve en fazla 10 MB boyutundaki dosyaları ekleyebilirsiniz.';
+                documentError.classList.remove('hidden');
+                documentInput.value = '';
+                corporateForm.dataset.documentBatch = String(Date.now());
+                corporateForm.dataset.pendingUploads = '0';
+                corporateForm.querySelectorAll('input[name="documents[]"]').forEach((input) => input.remove());
+                selectedDocuments.replaceChildren();
+                return;
+            }
+            documentError.classList.add('hidden');
+            uploadDocuments(documentInput.files);
+        });
+
+        ['dragenter', 'dragover'].forEach((eventName) => {
+            documentDropzone.addEventListener(eventName, (event) => {
+                event.preventDefault();
+                documentDropzone.classList.add('border-indigo-500', 'bg-indigo-50', 'dark:bg-indigo-950/50');
+            });
+        });
+        ['dragleave', 'drop'].forEach((eventName) => {
+            documentDropzone.addEventListener(eventName, (event) => {
+                event.preventDefault();
+                documentDropzone.classList.remove('border-indigo-500', 'bg-indigo-50', 'dark:bg-indigo-950/50');
+            });
+        });
+        documentDropzone.addEventListener('drop', (event) => {
+            const droppedFiles = Array.from(event.dataTransfer.files);
+            const invalidFiles = droppedFiles.filter((file) => !acceptedDocument.test(file.name) || file.size > 10 * 1024 * 1024);
+            if (invalidFiles.length) {
+                documentError.textContent = 'Yalnızca PDF, PNG, JPG veya JPEG biçimindeki ve en fazla 10 MB boyutundaki dosyaları ekleyebilirsiniz.';
+                documentError.classList.remove('hidden');
+                return;
+            }
+            documentError.classList.add('hidden');
+            const transfer = new DataTransfer();
+            droppedFiles.forEach((file) => transfer.items.add(file));
+            documentInput.files = transfer.files;
+            uploadDocuments(documentInput.files);
+        });
+
+        documentDropzone.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault();
+                documentInput.click();
+            }
+        });
+        corporateForm.addEventListener('reset', () => {
+            corporateForm.dataset.documentBatch = String(Date.now());
+            corporateForm.dataset.pendingUploads = '0';
+            selectedDocuments.replaceChildren();
+            corporateForm.querySelectorAll('input[name="documents[]"]').forEach((input) => input.remove());
+            documentError.classList.add('hidden');
+            document.getElementById('globalAlertContainer').replaceChildren();
+        });
+
+    </script>
+    
+    <script>
+    var corporateRequestInProgress = false;
+    $('#modal-button-register').on('click', function() {
+        if (corporateRequestInProgress) return;
+
+        var form = document.getElementById('form-register');
+        if (documentError.textContent) {
+            window.showGlobalAlert(documentError.textContent, 'danger');
+            return;
+        }
+        if (Number(form.dataset.pendingUploads) > 0) {
+            window.showGlobalAlert('Belgeler yükleniyor. Lütfen yükleme tamamlanınca tekrar kaydedin.', 'danger');
+            return;
+        }
+        if (!form.querySelector('input[name="documents[]"]')) {
+            window.showGlobalAlert('vergi levhası yüklemeniz zorunludur.', 'danger');
+            return;
+        }
+
+       
+        $('#modal-button-register').buttonanimate('loading');
+
+        $.ajax({
+        url: 'index.php?route=account/register/save',
+        type: 'post',
+        dataType: 'json',
+        data: new FormData(form),
+        processData: false,
+        contentType: false,
+        cache: false,
+
+        complete: function() {
+            $('#modal-button-register').buttonanimate('reset');
+            
+        },
+        
+        success: function(json) {
+            if (json.error && json.error.warning) {
+                alerterror(json.error.warning);
+                return;
+            }
+
+            if (json.success) {
+                bootstrap.Modal.getOrCreateInstance(document.getElementById('corporateModal')).hide();
+                form.reset();
+                selectedDocuments.replaceChildren();
+                alertsuccess(json.success);
+            }
+
+        },
+        error: function(xhr, ajaxOptions, thrownError) {
+            console.error('Kurumsal başvuru isteği başarısız:', ajaxOptions, thrownError, xhr.status, xhr.responseText);
+            var response = xhr.responseJSON;
+            if (!response && xhr.responseText) {
+                try {
+                    response = JSON.parse(xhr.responseText.trim());
+                } catch (parseError) {
+                    var firstBrace = xhr.responseText.indexOf('{');
+                    var lastBrace = xhr.responseText.lastIndexOf('}');
+                    if (firstBrace !== -1 && lastBrace > firstBrace) {
+                        try { response = JSON.parse(xhr.responseText.substring(firstBrace, lastBrace + 1)); } catch (ignored) {}
+                    }
+                }
+            }
+            if (response && response.success) {
+                bootstrap.Modal.getOrCreateInstance(document.getElementById('corporateModal')).hide();
+                form.reset();
+                alertsuccess(response.success);
+                return;
+            }
+            if (response && response.error && response.error.warning) {
+                alerterror(response.error.warning);
+            }
+        }
+        });
+    });
+</script>
+</body>
+</html>
