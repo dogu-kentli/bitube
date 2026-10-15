@@ -5,6 +5,9 @@ class ControllerCommonHome extends Controller {
 		$this->document->setDescription($this->config->get('config_meta_description'));
 		$this->document->setKeywords($this->config->get('config_meta_keyword'));
 		$data['login'] = $this->url->link('account/login/ajax', '', true);
+		$data['forgotten'] = $this->url->link('account/forgotten/ajax', '', true);
+		$data['account'] = $this->url->link('account/account', '', true);
+		$data['customer_logged'] = $this->customer->isLogged();
 
 		if (isset($this->request->get['route'])) {
 			$this->document->addLink($this->config->get('config_url'), 'canonical');

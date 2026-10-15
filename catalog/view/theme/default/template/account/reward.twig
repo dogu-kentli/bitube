@@ -1,59 +1,96 @@
 {{ header }}
-<div id="account-reward" class="container">
-  <ul class="breadcrumb">
-    {% for breadcrumb in breadcrumbs %}
-    <li><a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a></li>
-    {% endfor %}
-  </ul>
-  <div class="row">{{ column_left }}
-    {% if column_left and column_right %}
-    {% set class = 'col-sm-6' %}
-    {% elseif column_left or column_right %}
-    {% set class = 'col-sm-9' %}
-    {% else %}
-    {% set class = 'col-sm-12' %}
-    {% endif %}
-    <div id="content" class="{{ class }}">{{ content_top }}
-      <h1>{{ heading_title }}</h1>
-      <p>{{ text_total }} <b>{{ total }}</b>.</p>
-      <div class="table-responsive">
-        <table class="table table-bordered table-hover">
-          <thead>
-            <tr>
-              <td class="text-left">{{ column_date_added }}</td>
-              <td class="text-left">{{ column_description }}</td>
-              <td class="text-right">{{ column_points }}</td>
-            </tr>
-          </thead>
-          <tbody>
-          
+
+<main id="account-reward" class="flex-1 w-full bg-slate-50 px-4 py-8 text-slate-800 dark:bg-slate-950 dark:text-slate-100 sm:px-6 sm:py-10">
+  <div class="mx-auto max-w-7xl">
+    <nav aria-label="Breadcrumb" class="mb-6">
+      <ol class="flex flex-wrap items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+        {% for breadcrumb in breadcrumbs %}
+        <li class="flex items-center gap-2">
+          {% if not loop.first %}<i class="fa-solid fa-chevron-right text-[10px]" aria-hidden="true"></i>{% endif %}
+          {% if loop.last %}<span class="font-semibold text-indigo-600 dark:text-indigo-400" aria-current="page">{{ breadcrumb.text }}</span>
+          {% else %}<a href="{{ breadcrumb.href }}" class="transition hover:text-indigo-600 dark:hover:text-indigo-400">{{ breadcrumb.text }}</a>{% endif %}
+        </li>
+        {% endfor %}
+      </ol>
+    </nav>
+
+    {{ content_top }}
+
+    <div class="row">
+      {{ column_left }}
+      <section class="min-w-0 {% if column_left and column_right %}col-sm-6{% elseif column_left or column_right %}col-sm-9{% else %}col-sm-12{% endif %}">
+        <div class="mb-6 flex flex-wrap items-end justify-between gap-3">
+          <div>
+            <p class="mb-1 text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">Hesap özeti</p>
+            <h1 class="m-0 text-2xl font-extrabold tracking-tight text-slate-900 dark:text-white">{{ heading_title }}</h1>
+          </div>
+        </div>
+
+        <section class="mb-6 overflow-hidden rounded-3xl border border-indigo-100 bg-gradient-to-br from-indigo-600 to-violet-700 text-white shadow-sm dark:border-indigo-900" aria-label="Puan bakiyesi">
+          <div class="flex flex-wrap items-center justify-between gap-5 p-6 sm:p-8">
+            <div>
+              <p class="text-sm font-semibold text-indigo-100">{{ text_total }}</p>
+              <p class="mt-2 text-4xl font-extrabold tracking-tight">{{ total }}</p>
+              <p class="mt-2 text-sm text-indigo-100">Alışverişlerinizden kazandığınız puanların toplamı</p>
+            </div>
+            <span class="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/15 text-3xl ring-1 ring-white/20" aria-hidden="true"><i class="fa-solid fa-star"></i></span>
+          </div>
+        </section>
+
+        <section class="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-sm dark:border-slate-800 dark:bg-slate-900" aria-labelledby="reward-history-title">
+          <div class="flex items-center gap-3 border-b border-slate-100 px-5 py-5 dark:border-slate-800 sm:px-6">
+            <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-indigo-50 text-indigo-600 dark:bg-indigo-950/60 dark:text-indigo-300"><i class="fa-solid fa-clock-rotate-left" aria-hidden="true"></i></span>
+            <div>
+              <h2 id="reward-history-title" class="text-lg font-bold text-slate-900 dark:text-white">Puan hareketleri</h2>
+              <p class="mt-0.5 text-sm text-slate-500 dark:text-slate-400">Kazandığınız ve kullandığınız puanların dökümü</p>
+            </div>
+          </div>
+
           {% if rewards %}
-          {% for reward in rewards %}
-          <tr>
-            <td class="text-left">{{ reward.date_added }}</td>
-            <td class="text-left">{% if reward.order_id %} <a href="{{ reward.href }}">{{ reward.description }}</a> {% else %}
-              {{ reward.description }}
-              {% endif %}</td>
-            <td class="text-right">{{ reward.points }}</td>
-          </tr>
-          {% endfor %}
+          <div class="overflow-x-auto">
+            <table class="w-full min-w-[560px] text-left text-sm">
+              <thead class="bg-slate-50 text-xs uppercase tracking-wide text-slate-500 dark:bg-slate-950/60 dark:text-slate-400">
+                <tr>
+                  <th scope="col" class="px-5 py-3 font-bold sm:px-6">{{ column_date_added }}</th>
+                  <th scope="col" class="px-5 py-3 font-bold sm:px-6">{{ column_description }}</th>
+                  <th scope="col" class="px-5 py-3 text-right font-bold sm:px-6">{{ column_points }}</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-slate-100 dark:divide-slate-800">
+                {% for reward in rewards %}
+                <tr class="transition-colors hover:bg-indigo-50/50 dark:hover:bg-indigo-950/20">
+                  <td class="whitespace-nowrap px-5 py-4 text-slate-600 dark:text-slate-300 sm:px-6">{{ reward.date_added }}</td>
+                  <td class="px-5 py-4 text-slate-700 dark:text-slate-200 sm:px-6">
+                    {% if reward.order_id %}<a href="{{ reward.href }}" class="font-semibold text-indigo-600 transition hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300">{{ reward.description }}</a>
+                    {% else %}{{ reward.description }}{% endif %}
+                  </td>
+                  <td class="whitespace-nowrap px-5 py-4 text-right font-bold {% if reward.points < 0 %}text-rose-600 dark:text-rose-400{% else %}text-emerald-700 dark:text-emerald-400{% endif %} sm:px-6">{{ reward.points }}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          <div class="flex flex-col gap-3 border-t border-slate-100 px-5 py-4 dark:border-slate-800 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+            <div class="text-sm">{{ pagination }}</div>
+            <div class="text-sm text-slate-500 dark:text-slate-400">{{ results }}</div>
+          </div>
           {% else %}
-          <tr>
-            <td class="text-center" colspan="3">{{ text_empty }}</td>
-          </tr>
+          <div class="px-6 py-14 text-center">
+            <span class="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-500 ring-8 ring-indigo-50/50 dark:bg-indigo-950/50 dark:text-indigo-400 dark:ring-indigo-950/20"><i class="fa-solid fa-star text-xl" aria-hidden="true"></i></span>
+            <h3 class="font-bold text-slate-800 dark:text-slate-100">{{ text_empty }}</h3>
+          </div>
           {% endif %}
-            </tbody>
-          
-        </table>
-      </div>
-      <div class="row">
-        <div class="col-sm-6 text-left">{{ pagination }}</div>
-        <div class="col-sm-6 text-right">{{ results }}</div>
-      </div>
-      <div class="buttons clearfix">
-        <div class="pull-right"><a href="{{ continue }}" class="btn btn-primary">{{ button_continue }}</a></div>
-      </div>
-      {{ content_bottom }}</div>
-    {{ column_right }}</div>
-</div>
+        </section>
+
+        <div class="mt-6 flex justify-end">
+          <a href="{{ continue }}" class="inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-2 text-sm font-semibold text-white shadow-sm transition hover:bg-indigo-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-slate-950"><i class="fa-solid fa-arrow-left text-xs" aria-hidden="true"></i>{{ button_continue }}</a>
+        </div>
+      </section>
+      {{ column_right }}
+    </div>
+
+    <div class="mt-8">{{ content_bottom }}</div>
+  </div>
+</main>
+
 {{ footer }}

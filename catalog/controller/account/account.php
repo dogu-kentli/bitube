@@ -38,6 +38,61 @@ class ControllerAccountAccount extends Controller {
 		$data['logout'] = $this->url->link('account/logout', '', true);
 
 		$this->load->model('account/order');
+		$this->load->model('account/address');
+		$this->load->model('account/customer_group');
+
+		$performance_total = $this->model_account_order->getCustomerOrderTotal();
+		$data['performance_total'] = $this->currency->format($performance_total, $this->session->data['currency']);
+
+		$address_info = $this->model_account_address->getAddress($this->customer->getAddressId());
+		$data['performance_company'] = !empty($address_info['company']) ? $address_info['company'] : $this->customer->getFirstName() . ' ' . $this->customer->getLastName();
+
+		$customer_group = $this->model_account_customer_group->getCustomerGroup($this->customer->getGroupId());
+		$data['performance_discount'] = isset($customer_group['percent']) ? (float)$customer_group['percent'] : 0;
+		$data['performance_group_name'] = !empty($customer_group['name']) ? $customer_group['name'] : '';
+
+		$performance_thresholds = array();
+		foreach ($this->model_account_customer_group->getCustomerGroups() as $group) {
+			// Mevcut grup zaten müşterinin uygulanan seviyesidir; hedef başka bir grup olmalıdır.
+			if ((int)$group['customer_group_id'] !== (int)$this->customer->getGroupId() && isset($group['spending_threshold']) && is_numeric($group['spending_threshold'])) {
+				$performance_thresholds[] = array(
+					'threshold' => (float)$group['spending_threshold'],
+					'name' => isset($group['name']) ? $group['name'] : '',
+					'percent' => isset($group['percent']) ? (float)$group['percent'] : 0
+				);
+			}
+		}
+		usort($performance_thresholds, function($a, $b) {
+			return $a['threshold'] <=> $b['threshold'];
+		});
+
+		$previous_threshold = 0;
+		$next_threshold = false;
+		foreach ($performance_thresholds as $threshold) {
+			if ($threshold['threshold'] <= $performance_total) {
+				$previous_threshold = $threshold['threshold'];
+			} elseif ($next_threshold === false) {
+				$next_threshold = $threshold;
+			}
+		}
+
+		if ($next_threshold !== false) {
+			$range = $next_threshold['threshold'] - $previous_threshold;
+			$data['performance_progress'] = $range > 0 ? max(0, min(100, (($performance_total - $previous_threshold) / $range) * 100)) : 0;
+			$data['performance_has_next_tier'] = true;
+			$data['performance_next_group_name'] = $next_threshold['name'];
+			$data['performance_next_discount'] = $next_threshold['percent'];
+			$data['performance_target'] = $this->currency->format($next_threshold['threshold'], $this->session->data['currency']);
+			$data['performance_remaining'] = $this->currency->format(max(0, $next_threshold['threshold'] - $performance_total), $this->session->data['currency']);
+		} else {
+			$data['performance_progress'] = 100;
+			$data['performance_has_next_tier'] = false;
+			$data['performance_next_group_name'] = '';
+			$data['performance_next_discount'] = 0;
+			$data['performance_target'] = '';
+			$data['performance_remaining'] = '';
+		}
+
 		$data['orders'] = array();
 
 		foreach ($this->model_account_order->getOrders(0, 5) as $result) {
@@ -73,6 +128,7 @@ class ControllerAccountAccount extends Controller {
 		
 		$data['wishlist'] = $this->url->link('account/wishlist');
 		$data['order'] = $this->url->link('account/order', '', true);
+		$data['shop'] = $this->url->link('product/search', '', true);
 		$data['download'] = $this->url->link('account/download', '', true);
 		
 		if ($this->config->get('total_reward_status')) {

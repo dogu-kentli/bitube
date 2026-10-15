@@ -288,3 +288,54 @@ body { font-family: 'Manrope', sans-serif; }
 	}
 }
 
+html.dark #account-account { background-color: #020617 !important; color: #e2e8f0 !important; }
+html.dark #accountMenuToggle,
+html.dark #recentOrdersPanel { background-color: #111827 !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+html.dark #recentOrdersPanel > div:first-child,
+html.dark #recentOrdersPanel tbody tr,
+html.dark #recentOrdersPanel tbody td { border-color: #334155 !important; }
+html.dark #recentOrdersPanel h2,
+html.dark #recentOrdersPanel h3 { color: #f1f5f9 !important; }
+html.dark #recentOrdersPanel p { color: #94a3b8 !important; }
+html.dark #recentOrdersPanel thead { background-color: #0b1220 !important; color: #94a3b8 !important; }
+html.dark #recentOrdersPanel tbody td { color: #cbd5e1 !important; }
+html.dark #recentOrdersPanel tbody td:first-child,
+html.dark #recentOrdersPanel tbody td:nth-last-child(2) { color: #f1f5f9 !important; }
+html.dark #recentOrdersPanel tbody tr:hover { background-color: #1e1b4b !important; }
+html.dark #recentOrdersPanel tbody td span { background-color: #312e81 !important; color: #e0e7ff !important; }
+html.dark #recentOrdersPanel [class*="bg-indigo-50"] { background-color: #1e1b4b !important; }
+html.dark #accountMenuToggle:hover { background-color: #1e293b !important; }
+html.dark #account-account [role="status"] { background-color: #123326 !important; border-color: #236344 !important; color: #bbf7d0 !important; }
+html.dark #customerPerformanceCard { background-color: #111827 !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+html.dark #customerPerformanceCard .performance-metric { background-color: #0b1220 !important; border-color: #334155 !important; }
+html.dark #customerPerformanceCard .performance-target { background: linear-gradient(135deg, #172554, #111827) !important; border-color: #3730a3 !important; }
+html.dark #customerPerformanceCard h2,
+html.dark #customerPerformanceCard .performance-value { color: #f1f5f9 !important; }
+html.dark #customerPerformanceCard p,
+html.dark #customerPerformanceCard .performance-muted { color: #94a3b8 !important; }
+html.dark #customerPerformanceCard .performance-divider { border-color: #334155 !important; }
+html.dark #customerPerformanceCard .performance-track { background-color: #1f2937 !important; }
+html.dark #customerPerformanceCard .performance-fill { background-color: #15803d !important; background-image: repeating-linear-gradient(135deg, rgba(255,255,255,.24) 0, rgba(255,255,255,.24) 6px, transparent 6px, transparent 12px), linear-gradient(90deg, #15803d, #4ade80) !important; }
+
+/* Reward points page dark theme */
+html.dark #account-reward { background-color: #020617 !important; color: #e2e8f0 !important; }
+html.dark #account-reward [aria-labelledby="reward-history-title"] { background-color: #111827 !important; border-color: #334155 !important; color: #e2e8f0 !important; }
+html.dark #account-reward [aria-labelledby="reward-history-title"] > div:first-child,
+html.dark #account-reward [aria-labelledby="reward-history-title"] tbody tr,
+html.dark #account-reward [aria-labelledby="reward-history-title"] tbody td { border-color: #334155 !important; }
+html.dark #account-reward [aria-labelledby="reward-history-title"] h2,
+html.dark #account-reward [aria-labelledby="reward-history-title"] h3 { color: #f1f5f9 !important; }
+html.dark #account-reward [aria-labelledby="reward-history-title"] p,
+html.dark #account-reward [aria-labelledby="reward-history-title"] tbody td:first-child,
+html.dark #account-reward [aria-labelledby="reward-history-title"] tbody td:nth-child(2) { color: #cbd5e1; }
+html.dark #account-reward [aria-labelledby="reward-history-title"] thead { background-color: #0b1220 !important; color: #94a3b8 !important; }
+html.dark #account-reward [aria-labelledby="reward-history-title"] tbody tr:hover { background-color: #1e1b4b !important; }
+html.dark #account-reward [aria-labelledby="reward-history-title"] a { color: #a5b4fc; }
+html.dark #account-reward [aria-labelledby="reward-history-title"] a:hover { color: #c7d2fe; }
+html.dark #account-reward [aria-labelledby="reward-history-title"] > div:last-child { border-color: #334155 !important; }
+html.dark #account-reward [aria-labelledby="reward-history-title"] .pagination > li > a,
+html.dark #account-reward [aria-labelledby="reward-history-title"] .pagination > li > span { color: #cbd5e1; background-color: #0b1220; border-color: #334155; }
+html.dark #account-reward [aria-labelledby="reward-history-title"] .pagination > .active > span { color: #fff; background-color: #4f46e5; border-color: #4f46e5; }
+html.dark #account-reward [aria-labelledby="reward-history-title"] .pagination > .disabled > span { color: #64748b; background-color: #111827; border-color: #334155; }
+html.dark #account-reward [aria-label="Puan bakiyesi"] { border-color: #3730a3 !important; }
+

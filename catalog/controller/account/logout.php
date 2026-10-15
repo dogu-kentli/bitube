@@ -23,6 +23,9 @@ class ControllerAccountLogout extends Controller {
 		$this->load->language('account/logout');
 
 		$this->document->setTitle($this->language->get('heading_title'));
+		$data['heading_title'] = $this->language->get('heading_title');
+		$data['text_message'] = $this->language->get('text_message');
+		$data['button_continue'] = $this->language->get('button_continue');
 
 		$data['breadcrumbs'] = array();
 
@@ -50,6 +53,6 @@ class ControllerAccountLogout extends Controller {
 		$data['footer'] = $this->load->controller('common/footer');
 		$data['header'] = $this->load->controller('common/header');
 
-		$this->response->setOutput($this->load->view('common/success', $data));
+		$this->response->setOutput($this->load->view('account/logout', $data));
 	}
 }

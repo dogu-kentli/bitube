@@ -40,8 +40,8 @@
                 </a>
 
                 <!-- Kurumsal Card -->
-                <button type="button" data-bs-toggle="modal" data-bs-target="#corporateModal" 
-                        class="group relative bg-white border border-slate-200 rounded-2xl p-8 text-left shadow-lg transition-all duration-300 flex flex-col justify-between cursor-pointer">
+                <a href="{% if customer_logged %}{{ account }}{% else %}#corporateModal{% endif %}" {% if not customer_logged %}data-bs-toggle="modal" data-bs-target="#corporateModal"{% endif %}
+                   class="group relative bg-white border border-slate-200 rounded-2xl p-8 text-left shadow-lg transition-all duration-300 flex flex-col justify-between cursor-pointer">
                     <div>
                         <div class="w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-950/50 text-indigo-600 dark:text-indigo-400 flex items-center justify-center text-xl mb-6 group-hover:scale-110 transition-transform">
                             <i class="fa-solid fa-building-columns"></i>
@@ -55,7 +55,7 @@
                         <span>Kurumsal Başvuru Oluştur</span>
                         <i class="fa-solid fa-arrow-right ml-2"></i>
                     </div>
-                </button>
+                </a>
 
             </div>
 
@@ -114,7 +114,30 @@
                         </div>
                         <button type="submit" class="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition text-sm inline-flex items-center justify-center gap-2"><i class="fa-solid fa-right-to-bracket" aria-hidden="true"></i><span>Giriş Yap</span></button>
                     </form>
-                    <div class="mt-4 text-center text-sm"><a href="index.php?route=account/forgotten" class="text-indigo-600 hover:text-indigo-700">Şifremi unuttum</a></div>
+                    <div class="mt-4 text-center text-sm"><a href="#forgottenModal" id="forgottenModalTrigger" class="text-indigo-600 hover:text-indigo-700">Şifremi unuttum</a></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Forgotten Password Modal -->
+    <div class="modal fade" id="forgottenModal" tabindex="-1" aria-labelledby="forgottenModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm">
+            <div class="modal-content bg-white text-slate-800 border border-slate-200 rounded-2xl shadow-2xl overflow-hidden dark:bg-slate-900 dark:text-slate-100 dark:border-slate-700">
+                <div class="modal-header border-b border-slate-200 px-6 py-4 dark:border-slate-700">
+                    <h5 class="modal-title font-bold text-lg text-slate-900 dark:text-white" id="forgottenModalLabel"><i class="fa-solid fa-key mr-2 text-indigo-600 dark:text-indigo-400" aria-hidden="true"></i>Şifremi Unuttum</h5>
+                    <button type="button" class="btn-close dark:invert" data-bs-dismiss="modal" aria-label="Kapat"></button>
+                </div>
+                <div class="modal-body p-6">
+                    <p class="mb-4 text-sm text-slate-600 dark:text-slate-300">Sıfırlama bağlantısını göndermemiz için hesabınıza kayıtlı e-posta adresini girin.</p>
+                    <form id="forgottenForm" action="{{ forgotten }}" method="post" class="space-y-4" novalidate>
+                        <div>
+                            <label for="forgottenEmail" class="block text-xs font-semibold uppercase tracking-wider mb-1 text-slate-600 dark:text-slate-300">E-posta adresi</label>
+                            <input id="forgottenEmail" name="email" type="email" autocomplete="email" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm text-slate-900 dark:text-slate-100" placeholder="ornek@firma.com">
+                        </div>
+                        <button id="forgottenSubmit" type="submit" class="w-full py-3 px-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold rounded-xl transition text-sm inline-flex items-center justify-center gap-2"><i class="fa-solid fa-paper-plane" aria-hidden="true"></i><span>Bağlantı Gönder</span></button>
+                    </form>
+                    <div class="mt-4 text-center text-sm"><a href="#loginModal" id="backToLoginModal" class="text-indigo-600 hover:text-indigo-700 dark:text-indigo-400">Giriş ekranına dön</a></div>
                 </div>
             </div>
         </div>

@@ -83,7 +83,7 @@
 
         const loginForm = document.getElementById('loginForm');
         let loginRequestInProgress = false;
-        loginForm.addEventListener('submit', (event) => {
+        if (loginForm) loginForm.addEventListener('submit', (event) => {
             event.preventDefault();
             if (loginRequestInProgress) return;
 
@@ -115,6 +115,80 @@
                 complete: function() {
                     $(loginButton).buttonanimate('reset');
                     loginRequestInProgress = false;
+                }
+            });
+        });
+
+        const forgottenForm = document.getElementById('forgottenForm');
+        const forgottenModalElement = document.getElementById('forgottenModal');
+        const loginModalElement = document.getElementById('loginModal');
+        const forgottenTrigger = document.getElementById('forgottenModalTrigger');
+        const backToLogin = document.getElementById('backToLoginModal');
+
+        if (forgottenTrigger && forgottenModalElement && loginModalElement) {
+            forgottenTrigger.addEventListener('click', (event) => {
+                event.preventDefault();
+                bootstrap.Modal.getOrCreateInstance(loginModalElement).hide();
+                loginModalElement.addEventListener('hidden.bs.modal', function showForgotten() {
+                    loginModalElement.removeEventListener('hidden.bs.modal', showForgotten);
+                    bootstrap.Modal.getOrCreateInstance(forgottenModalElement).show();
+                });
+            });
+        }
+
+        if (backToLogin && forgottenModalElement && loginModalElement) {
+            backToLogin.addEventListener('click', (event) => {
+                event.preventDefault();
+                bootstrap.Modal.getOrCreateInstance(forgottenModalElement).hide();
+                forgottenModalElement.addEventListener('hidden.bs.modal', function showLogin() {
+                    forgottenModalElement.removeEventListener('hidden.bs.modal', showLogin);
+                    bootstrap.Modal.getOrCreateInstance(loginModalElement).show();
+                });
+            });
+        }
+
+        let forgottenRequestInProgress = false;
+        if (forgottenForm) forgottenForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+            if (forgottenRequestInProgress) return;
+
+            const button = document.getElementById('forgottenSubmit');
+            const email = forgottenForm.elements.email.value.trim();
+            if (!email) {
+                alerterror('E-posta adresinizi girin.');
+                return;
+            }
+
+            forgottenRequestInProgress = true;
+            $(button).buttonanimate('loading');
+
+            $.ajax({
+                url: forgottenForm.action,
+                type: 'post',
+                dataType: 'json',
+                data: $(forgottenForm).serialize(),
+                success: function(json) {
+                    if (json.error && json.error.warning) {
+                        alerterror(json.error.warning);
+                        return;
+                    }
+                    if (json.success) {
+                        bootstrap.Modal.getOrCreateInstance(forgottenModalElement).hide();
+                        forgottenForm.reset();
+                        alertsuccess(json.success);
+                    }
+                },
+                error: function(xhr) {
+                    const json = xhr.responseJSON;
+                    if (json && json.error && json.error.warning) {
+                        alerterror(json.error.warning);
+                    } else {
+                        alerterror('İstek tamamlanamadı. Lütfen tekrar deneyin.');
+                    }
+                },
+                complete: function() {
+                    $(button).buttonanimate('reset');
+                    forgottenRequestInProgress = false;
                 }
             });
         });
