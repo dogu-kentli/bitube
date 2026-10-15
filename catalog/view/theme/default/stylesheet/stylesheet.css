@@ -1,632 +1,236 @@
-:root {
-  --bitube-bg: #f4f7fb;
-  --bitube-surface: rgba(255, 255, 255, 0.9);
-  --bitube-surface-strong: #ffffff;
-  --bitube-surface-muted: #eef2ff;
-  --bitube-border: rgba(148, 163, 184, 0.18);
-  --bitube-border-strong: rgba(99, 102, 241, 0.2);
-  --bitube-text: #0f172a;
-  --bitube-muted: #64748b;
-  --bitube-accent: #4f46e5;
-  --bitube-accent-2: #7c3aed;
-  --bitube-accent-soft: rgba(79, 70, 229, 0.12);
-  --bitube-success: #0f766e;
-  --bitube-success-soft: rgba(15, 118, 110, 0.12);
-  --bitube-danger: #dc2626;
-  --bitube-danger-soft: rgba(220, 38, 38, 0.1);
-  --bitube-shadow: 0 18px 45px rgba(15, 23, 42, 0.09);
+/* MODAL / AUTH MODERNIZATION - preserve existing modal flow */
+.modal,
+.modal-backdrop {
+  z-index: 2000 !important;
 }
 
-html, body {
-  background: linear-gradient(180deg, #f8fafc 0%, #eef2ff 100%);
-  color: var(--bitube-text);
+.modal-dialog {
+  max-width: 480px;
+  margin: 2rem auto;
 }
 
-body {
-  font-family: 'Manrope', 'Segoe UI', sans-serif;
-}
-
-img {
-  max-width: 100%;
-}
-
-a {
-  transition: color 0.2s ease, opacity 0.2s ease, transform 0.2s ease;
-}
-
-#account-login,
-#account-register,
-#account-account,
-#account-reward {
-  background: linear-gradient(180deg, #f8fafc 0%, #eff6ff 100%);
-}
-
-#account-login .container,
-#account-register .container,
-#account-account .container,
-#account-reward .container {
-  padding-top: 40px;
-  padding-bottom: 40px;
-}
-
-.breadcrumb {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  margin: 0 0 22px;
-  padding: 0;
-  list-style: none;
-  color: var(--bitube-muted);
-  font-size: 13px;
-}
-
-.breadcrumb li {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.breadcrumb a {
-  color: var(--bitube-muted);
-  text-decoration: none;
-}
-
-.breadcrumb a:hover {
-  color: var(--bitube-accent);
-}
-
-.breadcrumb li:last-child a,
-.breadcrumb li:last-child {
-  color: var(--bitube-accent);
-  font-weight: 700;
-}
-
-.well,
-.card,
-#content > .well,
-#content > .card,
-#account-login .auth-card,
-#account-register .auth-card {
-  background: rgba(255, 255, 255, 0.85);
-  border: 1px solid var(--bitube-border);
-  border-radius: 24px;
-  box-shadow: var(--bitube-shadow);
-  backdrop-filter: blur(10px);
-}
-
-#content > .well,
-#content > .card,
-.auth-card {
-  padding: 28px;
-}
-
-#account-login .auth-layout,
-#account-register .auth-layout {
-  display: grid;
-  grid-template-columns: 1.1fr 0.9fr;
-  gap: 28px;
-  align-items: stretch;
-}
-
-@media (max-width: 991px) {
-  #account-login .auth-layout,
-  #account-register .auth-layout {
-    grid-template-columns: 1fr;
-  }
-}
-
-.auth-card {
-  position: relative;
+#loginModal .modal-dialog,
+#registerModal .modal-dialog,
+#forgottenModal .modal-dialog,
+#loginModal .modal-content,
+#registerModal .modal-content,
+#forgottenModal .modal-content {
+  border: 0;
+  border-radius: 28px;
   overflow: hidden;
 }
 
-.auth-card--base {
-  padding: 30px;
+.modal-content {
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  box-shadow: 0 30px 80px rgba(15, 23, 42, 0.18);
+  backdrop-filter: blur(12px);
 }
 
-.auth-card--gradient {
-  background: linear-gradient(135deg, rgba(79,70,229,0.95), rgba(124,58,237,0.88));
-  color: #fff;
-  border-color: rgba(255,255,255,0.15);
-  box-shadow: 0 28px 60px rgba(79,70,229,0.25);
+.modal-header {
+  position: relative;
+  padding: 1.25rem 1.5rem 1rem;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.16);
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.06), rgba(124, 58, 237, 0.04));
 }
 
-.auth-card--gradient * {
-  color: inherit;
-}
-
-.auth-card--gradient .auth-highlight {
-  background: rgba(255,255,255,0.14);
-  border: 1px solid rgba(255,255,255,0.18);
-}
-
-.auth-header {
-  margin-bottom: 22px;
-}
-
-.auth-kicker,
-.chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 7px 12px;
-  border-radius: 999px;
-  background: var(--bitube-accent-soft);
-  color: var(--bitube-accent);
-  font-size: 11px;
+.modal-header .modal-title {
+  color: #0f172a;
+  font-size: 1.4rem;
   font-weight: 800;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  letter-spacing: -0.02em;
 }
 
-.auth-card--gradient .chip {
-  background: rgba(255,255,255,0.14);
-  color: white;
+.modal-body {
+  padding: 1.4rem 1.5rem 1.2rem;
+  background: rgba(248, 250, 252, 0.7);
 }
 
-.auth-header h1,
-.auth-header h2,
-#content h1,
-#content h2,
-#content h3 {
-  margin: 12px 0 10px;
-  font-weight: 800;
-  line-height: 1.2;
-  letter-spacing: -0.03em;
-  color: var(--bitube-text);
+.modal-body p,
+.modal-body label,
+.modal-body .help-block,
+.modal-body small {
+  color: #475569;
 }
 
-.auth-card--gradient h1,
-.auth-card--gradient h2,
-.auth-card--gradient h3,
-.auth-card--gradient p,
-.auth-card--gradient li,
-.auth-card--gradient span {
-  color: #fff;
+.modal-body .form-group {
+  margin-bottom: 1.1rem;
 }
 
-.auth-header p,
-.auth-subtext,
-#content p,
-.form-help {
-  color: var(--bitube-muted);
-  line-height: 1.6;
+.modal-body .form-group:last-child {
+  margin-bottom: 0;
 }
 
-.auth-card--gradient .auth-subtext,
-.auth-card--gradient .form-help {
-  color: rgba(255,255,255,0.86);
-}
-
-.bitube-form {
-  display: grid;
-  gap: 18px;
-}
-
-.bitube-form .form-group {
-  margin: 0;
-}
-
-.control-label,
-label {
+.modal-body .control-label,
+.modal-body label {
   display: block;
-  margin-bottom: 8px;
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--bitube-text);
+  margin-bottom: 0.5rem;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #334155;
 }
 
-.form-control,
-input[type="text"],
-input[type="email"],
-input[type="password"],
-input[type="tel"],
-textarea,
-select {
-  width: 100%;
+.modal-body .form-control,
+.modal-body input[type="text"],
+.modal-body input[type="email"],
+.modal-body input[type="password"],
+.modal-body input[type="tel"],
+.modal-body textarea,
+.modal-body select {
   min-height: 52px;
-  padding: 14px 16px;
-  background: rgba(255,255,255,0.85);
-  border: 1px solid rgba(148, 163, 184, 0.28);
-  border-radius: 14px;
-  box-shadow: inset 0 1px 1px rgba(15, 23, 42, 0.03);
-  font-size: 15px;
-  color: var(--bitube-text);
-  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  border-radius: 16px;
+  border: 1px solid rgba(148, 163, 184, 0.32);
+  background: rgba(255, 255, 255, 0.95);
+  color: #0f172a;
+  padding: 0.9rem 1rem;
+  box-shadow: inset 0 1px 1px rgba(15, 23, 42, 0.02);
 }
 
-textarea {
-  min-height: 110px;
-  resize: vertical;
-}
-
-.form-control:focus,
-input:focus,
-textarea:focus,
-select:focus {
-  border-color: rgba(79, 70, 229, 0.65);
+.modal-body .form-control:focus,
+.modal-body input:focus,
+.modal-body textarea:focus,
+.modal-body select:focus {
+  border-color: rgba(79, 70, 229, 0.6);
   box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.12);
   outline: none;
 }
 
-.btn,
-button,
-input[type="submit"],
-input[type="button"],
-input[type="reset"],
-.button,
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
+.modal-body .btn,
+.modal-body .btn-primary,
+.modal-body button,
+.modal-body input[type="submit"] {
   min-height: 48px;
-  padding: 13px 22px;
-  border: 1px solid transparent;
   border-radius: 14px;
-  background: linear-gradient(135deg, var(--bitube-accent), var(--bitube-accent-2));
-  color: #fff;
-  font-size: 14px;
+  padding: 0.8rem 1.4rem;
   font-weight: 800;
-  letter-spacing: 0.01em;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
-  box-shadow: 0 14px 22px rgba(79, 70, 229, 0.18);
+  background: linear-gradient(135deg, #4f46e5, #7c3aed);
+  border: none;
+  color: #fff;
+  box-shadow: 0 14px 22px rgba(79, 70, 229, 0.2);
 }
 
-.btn:hover,
-button:hover,
-input[type="submit"]:hover,
-.button:hover,
-.btn-primary:hover {
+.modal-body .btn:hover,
+.modal-body .btn-primary:hover,
+.modal-body button:hover,
+.modal-body input[type="submit"]:hover {
   transform: translateY(-1px);
-  filter: brightness(1.02);
 }
 
-.btn-secondary,
-.btn-default,
-.btn-light,
-.btn-ghost {
-  background: rgba(255,255,255,0.8);
-  border: 1px solid rgba(148,163,184,0.28);
-  color: var(--bitube-text);
+.modal-body .btn-default,
+.modal-body .btn-secondary,
+.modal-body .btn-light,
+.modal-body .btn-ghost {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.25);
+  color: #0f172a;
   box-shadow: none;
 }
 
-.btn-lg {
-  min-height: 52px;
-  padding: 14px 26px;
-}
-
-.form-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 12px;
-  margin-top: 8px;
-}
-
-.form-actions .link,
-.form-actions a,
-.auth-card--gradient a {
-  color: inherit;
-  text-decoration: none;
+.modal-body .text-danger,
+.modal-body .alert-danger {
+  margin-top: 0.5rem;
+  color: #dc2626;
+  font-size: 0.75rem;
   font-weight: 700;
 }
 
-.form-actions a:hover,
-.auth-card--gradient a:hover {
-  opacity: 0.92;
+.modal-footer {
+  padding: 1rem 1.5rem 1.25rem;
+  border-top: 1px solid rgba(148, 163, 184, 0.14);
+  background: rgba(255, 255, 255, 0.55);
 }
 
-.alert,
-.alert-success,
-.alert-danger {
+.modal-body .checkbox,
+.modal-body .radio {
+  margin: 0.5rem 0;
+}
+
+.modal-body .checkbox label,
+.modal-body .radio label {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin: 0 0 18px;
-  padding: 14px 16px;
-  border-radius: 16px;
-  border: 1px solid transparent;
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-.alert-success {
-  background: var(--bitube-success-soft);
-  border-color: rgba(15, 118, 110, 0.18);
-  color: var(--bitube-success);
-}
-
-.alert-danger {
-  background: var(--bitube-danger-soft);
-  border-color: rgba(220, 38, 38, 0.18);
-  color: var(--bitube-danger);
-}
-
-.alert i,
-.alert > i,
-.alert .fa {
-  font-size: 16px;
-}
-
-#account-login .auth-list,
-#account-register .auth-list {
-  display: grid;
-  gap: 12px;
-  margin: 22px 0 0;
-  padding: 0;
-  list-style: none;
-}
-
-#account-login .auth-list li,
-#account-register .auth-list li {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 10px 12px;
-  border-radius: 14px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.14);
-}
-
-#account-login .auth-list i,
-#account-register .auth-list i {
-  display: inline-flex;
-  width: 28px;
-  height: 28px;
-  align-items: center;
-  justify-content: center;
-  border-radius: 10px;
-  background: rgba(255,255,255,0.12);
-  font-size: 13px;
-}
-
-#account-login .row,
-#account-register .row {
-  display: flex;
-  flex-wrap: wrap;
-  margin-left: -15px;
-  margin-right: -15px;
-}
-
-#account-login .col-sm-6,
-#account-login .col-sm-9,
-#account-login .col-sm-12,
-#account-register .col-sm-6,
-#account-register .col-sm-9,
-#account-register .col-sm-12 {
-  position: relative;
-  min-height: 1px;
-  padding-left: 15px;
-  padding-right: 15px;
-  width: 100%;
-}
-
-@media (min-width: 768px) {
-  #account-login .col-sm-6,
-  #account-register .col-sm-6 {
-    width: 50%;
-    flex: 0 0 50%;
-  }
-  #account-login .col-sm-9,
-  #account-register .col-sm-9 {
-    width: 75%;
-    flex: 0 0 75%;
-  }
-  #account-login .col-sm-12,
-  #account-register .col-sm-12 {
-    width: 100%;
-    flex: 0 0 100%;
-  }
-}
-
-#account-login #content,
-#account-register #content {
-  min-width: 0;
-}
-
-#account-login .well,
-#account-register .well {
-  padding: 28px 24px;
-}
-
-#account-login .well h2,
-#account-register .well h2 {
-  font-size: 26px;
-  margin-bottom: 12px;
-}
-
-#account-login .well p,
-#account-register .well p {
-  color: var(--bitube-muted);
-}
-
-#account-login .btn,
-#account-register .btn,
-#account-login input[type="submit"],
-#account-register input[type="submit"] {
-  width: auto;
-}
-
-#account-register fieldset {
-  margin-bottom: 20px;
-  padding: 22px;
-  border: 1px solid var(--bitube-border);
-  border-radius: 18px;
-  background: rgba(255,255,255,0.6);
-}
-
-#account-register fieldset legend {
-  padding: 0 10px;
-  font-size: 13px;
-  font-weight: 800;
-  color: var(--bitube-accent);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-#account-register .buttons {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 18px;
-}
-
-#account-register .radio,
-#account-register .checkbox {
-  margin-bottom: 12px;
-}
-
-#account-register .radio label,
-#account-register .checkbox label {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: var(--bitube-text);
+  gap: 0.6rem;
+  color: #334155;
   font-weight: 600;
 }
 
-#account-register input[type="radio"],
-#account-register input[type="checkbox"] {
+.modal-body input[type="checkbox"],
+.modal-body input[type="radio"] {
   width: 16px;
   height: 16px;
-  min-height: unset;
-  accent-color: var(--bitube-accent);
+  accent-color: #4f46e5;
 }
 
-.text-danger {
-  color: var(--bitube-danger) !important;
-  font-size: 12px;
-  margin-top: 8px;
-  font-weight: 600;
+.modal-header .btn-close {
+  filter: invert(0.3) saturate(0.8);
 }
 
-@media (max-width: 767px) {
-  #account-login .container,
-  #account-register .container,
-  #account-account .container,
-  #account-reward .container {
-    padding-left: 18px;
-    padding-right: 18px;
-  }
-
-  .auth-card,
-  #content > .well,
-  #content > .card {
-    padding: 20px 18px;
-  }
-
-  .form-actions {
-    flex-direction: column;
-    align-items: stretch;
-  }
+html.dark .modal-content {
+  background: rgba(15, 23, 42, 0.92);
+  border-color: rgba(148, 163, 184, 0.2);
+  box-shadow: 0 30px 80px rgba(2, 6, 23, 0.55);
 }
 
-html.dark body,
-html.dark #account-login,
-html.dark #account-register,
-html.dark #account-account,
-html.dark #account-reward {
-  background: linear-gradient(180deg, #020817 0%, #0f172a 100%);
+html.dark .modal-header {
+  background: linear-gradient(135deg, rgba(79, 70, 229, 0.15), rgba(124, 58, 237, 0.10));
+}
+
+html.dark .modal-header .modal-title,
+html.dark .modal-body label,
+html.dark .modal-body p,
+html.dark .modal-body .checkbox label,
+html.dark .modal-body .radio label,
+html.dark .modal-body .help-block,
+html.dark .modal-body small {
   color: #e2e8f0;
 }
 
-html.dark .breadcrumb a,
-html.dark .breadcrumb li,
-html.dark .control-label,
-html.dark #content p,
-html.dark .auth-subtext,
-html.dark .well p,
-html.dark .form-help,
-html.dark .text-muted,
-html.dark #content h1,
-html.dark #content h2,
-html.dark #content h3,
-html.dark .auth-card--base label,
-html.dark .auth-card--base .control-label,
-html.dark .auth-card--base .text-danger {
-  color: #cbd5e1;
+html.dark .modal-body {
+  background: rgba(15, 23, 42, 0.82);
 }
 
-html.dark .well,
-html.dark .card,
-html.dark #content > .well,
-html.dark #content > .card,
-html.dark .auth-card,
-html.dark #account-register fieldset {
-  background: rgba(15, 23, 42, 0.85);
-  border-color: rgba(148,163,184,0.2);
-  box-shadow: 0 18px 45px rgba(2, 6, 23, 0.55);
-}
-
-html.dark .form-control,
-html.dark input[type="text"],
-html.dark input[type="email"],
-html.dark input[type="password"],
-html.dark input[type="tel"],
-html.dark textarea,
-html.dark select {
-  background: rgba(15, 23, 42, 0.9);
-  border-color: rgba(148, 163, 184, 0.24);
+html.dark .modal-body .form-control,
+html.dark .modal-body input[type="text"],
+html.dark .modal-body input[type="email"],
+html.dark .modal-body input[type="password"],
+html.dark .modal-body input[type="tel"],
+html.dark .modal-body textarea,
+html.dark .modal-body select {
+  background: rgba(15, 23, 42, 0.86);
+  border-color: rgba(148, 163, 184, 0.25);
   color: #f8fafc;
 }
 
-html.dark .form-control::placeholder,
-html.dark input::placeholder,
-html.dark textarea::placeholder {
+html.dark .modal-body .form-control::placeholder,
+html.dark .modal-body input::placeholder,
+html.dark .modal-body textarea::placeholder {
   color: #94a3b8;
 }
 
-html.dark .btn-secondary,
-html.dark .btn-default,
-html.dark .btn-light,
-html.dark .btn-ghost {
-  background: rgba(15, 23, 42, 0.75);
-  border-color: rgba(148,163,184,0.2);
+html.dark .modal-body .btn-default,
+html.dark .modal-body .btn-secondary,
+html.dark .modal-body .btn-light,
+html.dark .modal-body .btn-ghost {
+  background: rgba(15, 23, 42, 0.7);
+  border-color: rgba(148, 163, 184, 0.22);
   color: #f8fafc;
 }
 
-html.dark .alert-success {
-  background: rgba(16, 185, 129, 0.10);
-  border-color: rgba(16, 185, 129, 0.20);
-  color: #a7f3d0;
+html.dark .modal-footer {
+  background: rgba(15, 23, 42, 0.7);
 }
 
-html.dark .alert-danger {
-  background: rgba(239, 68, 68, 0.10);
-  border-color: rgba(239, 68, 68, 0.20);
-  color: #fecaca;
+/* Ensure modal forms keep the same premium look while staying in bootstrap modal containers */
+#loginModal .modal-body,
+#registerModal .modal-body,
+#forgottenModal .modal-body {
+  background: linear-gradient(180deg, rgba(248,250,252,0.9), rgba(255,255,255,0.72));
 }
 
-html.dark .auth-card--gradient {
-  background: linear-gradient(135deg, rgba(79,70,229,0.88), rgba(109,40,217,0.9));
-}
-
-html.dark .chip,
-html.dark .auth-kicker {
-  background: rgba(255,255,255,0.08);
-  color: #e0e7ff;
-}
-
-html.dark .breadcrumb li:last-child a,
-html.dark .breadcrumb li:last-child {
-  color: #a5b4fc;
-}
-
-html.dark .form-control:focus,
-html.dark input:focus,
-html.dark textarea:focus,
-html.dark select:focus {
-  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.2);
-}
-
-#account-login .alert,
-#account-register .alert {
-  margin-top: 8px;
-}
-
-#account-login .text-danger,
-#account-register .text-danger {
-  font-weight: 700;
+html.dark #loginModal .modal-body,
+html.dark #registerModal .modal-body,
+html.dark #forgottenModal .modal-body {
+  background: linear-gradient(180deg, rgba(15,23,42,0.9), rgba(15,23,42,0.8));
 }
